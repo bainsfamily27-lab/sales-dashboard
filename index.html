@@ -146,9 +146,13 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
       <button onclick="tryUnlock()" style="font-family:var(--font-body);font-size:0.75rem;font-weight:600;background:var(--accent-dim2);border:1px solid rgba(37,99,235,0.3);color:var(--accent);border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap">Unlock</button>
       <span id="lock-msg" style="font-size:0.7rem;color:var(--muted)">view only</span>
     </div>
+    <button onclick="exportSnapshot()" style="font-family:var(--font-body);font-size:0.75rem;font-weight:600;background:var(--green-dim);border:1px solid rgba(22,163,74,0.3);color:var(--green);border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap" title="Copy shareable link to clipboard">Share snapshot</button>
     <div class="year-badge">2026</div>
   </div>
 </header>
+
+<!-- share toast -->
+<div id="share-toast" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0a0b0d;color:#fff;font-size:0.78rem;font-weight:500;padding:10px 20px;border-radius:8px;z-index:999;white-space:nowrap">Link copied to clipboard!</div>
 
 <main>
 
@@ -356,7 +360,7 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
       </table>
     </div>
 
-    <div class="section-label" style="margin-top:0.25rem">coverage vs remaining Q2 gap</div>
+    <div class="section-label" style="margin-top:0.25rem">pipeline coverage vs Q2 target ($11,191)</div>
     <div class="cov-cards">
       <div class="cov-card" id="cov-best-card">
         <div class="cov-label">Best case — all deals</div>
@@ -589,6 +593,7 @@ function addDeal() {
   const sentiment = document.getElementById('deal-sentiment').value;
   if (!name || mrr <= 0) return;
   deals.push({ id: Date.now(), name, product, mrr, sentiment });
+  localStorage.setItem('sd_deals', JSON.stringify(deals));
   document.getElementById('deal-name').value = '';
   document.getElementById('deal-mrr').value = '';
   renderDeals();
@@ -597,6 +602,7 @@ function addDeal() {
 
 function removeDeal(id) {
   deals = deals.filter(d => d.id !== id);
+  localStorage.setItem('sd_deals', JSON.stringify(deals));
   renderDeals();
   updatePipeline();
 }
@@ -619,21 +625,21 @@ function renderDeals() {
 
 function updatePipeline() {
   const q2c = parseFloat(document.getElementById('q2-closed').value) || 0;
-  const needed = Math.max(0, QUOTA.q2 - q2c);
+  const target = QUOTA.q2;
   const best   = deals.reduce((s,d) => s+d.mrr, 0);
   const likely = deals.filter(d => d.sentiment !== 'low').reduce((s,d) => s+d.mrr, 0);
   const cons   = deals.filter(d => d.sentiment === 'high').reduce((s,d) => s+d.mrr, 0);
 
   function setCov(prefix, val) {
-    const ratio = needed > 0 ? val / needed : (val > 0 ? 99 : 0);
-    const barPct = Math.min(100, val / Math.max(needed * 2, 1) * 100);
+    const ratio = target > 0 ? val / target : 0;
+    const barPct = Math.min(100, val / Math.max(target * 2, 1) * 100);
     let col, bg;
     if (ratio >= 2)      { col = '#16a34a'; bg = 'rgba(22,163,74,0.07)'; }
     else if (ratio >= 1) { col = '#d97706'; bg = 'rgba(217,119,6,0.07)'; }
     else                 { col = '#dc2626'; bg = 'rgba(220,38,38,0.07)'; }
     document.getElementById('cov-'+prefix+'-val').textContent = fmt(val);
     document.getElementById('cov-'+prefix+'-val').style.color = col;
-    document.getElementById('cov-'+prefix+'-sub').textContent = ratio.toFixed(1) + 'x coverage' + (needed===0?' (quota hit!)':'');
+    document.getElementById('cov-'+prefix+'-sub').textContent = ratio.toFixed(1) + 'x coverage';
     document.getElementById('cov-'+prefix+'-sub').style.color = col;
     document.getElementById('cov-'+prefix+'-bar').style.width = barPct + '%';
     document.getElementById('cov-'+prefix+'-bar').style.background = col;
@@ -643,6 +649,7 @@ function updatePipeline() {
 
   setCov('best', best); setCov('likely', likely); setCov('cons', cons);
 
+  const needed = Math.max(0, QUOTA.q2 - q2c);
   const s = document.getElementById('sentinel');
   const st = document.getElementById('sentinel-text');
   const sb = document.getElementById('sentinel-badge');
@@ -651,27 +658,84 @@ function updatePipeline() {
     st.style.color = 'var(--muted)'; st.textContent = 'Add deals above to see pipeline health.';
     sb.className = 'badge badge-muted'; sb.textContent = '—'; return;
   }
-  const lr = needed > 0 ? likely / needed : 2;
-  const cr = needed > 0 ? cons / needed : 2;
+  const lr = target > 0 ? likely / target : 2;
+  const cr = target > 0 ? cons / target : 2;
   let msg, cls, bg, bc;
-  if (needed === 0)        { msg='Q2 quota already closed — pipeline is pure upside.'; cls='badge badge-green'; bg='rgba(22,163,74,0.07)'; bc='rgba(22,163,74,0.3)'; sb.textContent='quota hit'; }
-  else if (lr >= 2)        { msg='Strong — High + Med deals cover 2x your Q2 gap. You\'re in good shape.'; cls='badge badge-green'; bg='rgba(22,163,74,0.07)'; bc='rgba(22,163,74,0.3)'; sb.textContent='healthy'; }
-  else if (lr >= 1 && cr >= 1){ msg='Manageable — enough High deals to cover the gap. Keep pushing to close them.'; cls='badge badge-amber'; bg='rgba(217,119,6,0.07)'; bc='rgba(217,119,6,0.3)'; sb.textContent='watch it'; }
-  else if (lr >= 1)        { msg='Risky — you need most Med deals to close to hit Q2. Work on converting to High.'; cls='badge badge-amber'; bg='rgba(217,119,6,0.07)'; bc='rgba(217,119,6,0.3)'; sb.textContent='risky'; }
-  else if (best >= needed) { msg='Danger — High + Med pipeline doesn\'t cover Q2. Build more pipeline now.'; cls='badge badge-red'; bg='rgba(220,38,38,0.07)'; bc='rgba(220,38,38,0.3)'; sb.textContent='danger'; }
-  else                     { msg='Critical — full pipeline doesn\'t cover Q2. You need '+fmt(needed-best)+' more MRR.'; cls='badge badge-red'; bg='rgba(220,38,38,0.07)'; bc='rgba(220,38,38,0.3)'; sb.textContent='critical'; }
+  if (needed === 0)           { msg='Q2 quota already closed — pipeline is pure upside.'; cls='badge badge-green'; bg='rgba(22,163,74,0.07)'; bc='rgba(22,163,74,0.3)'; sb.textContent='quota hit'; }
+  else if (lr >= 2)           { msg='Strong — High + Med deals alone cover 2x the Q2 target. You\'re in great shape.'; cls='badge badge-green'; bg='rgba(22,163,74,0.07)'; bc='rgba(22,163,74,0.3)'; sb.textContent='healthy'; }
+  else if (lr >= 1 && cr >= 1){ msg='Manageable — enough High deals to cover Q2. Keep pushing to close them.'; cls='badge badge-amber'; bg='rgba(217,119,6,0.07)'; bc='rgba(217,119,6,0.3)'; sb.textContent='watch it'; }
+  else if (lr >= 1)           { msg='Risky — you need most Med deals to close to hit Q2. Work on converting to High.'; cls='badge badge-amber'; bg='rgba(217,119,6,0.07)'; bc='rgba(217,119,6,0.3)'; sb.textContent='risky'; }
+  else if (best >= target)    { msg='Danger — High + Med pipeline doesn\'t cover Q2. Build more pipeline now.'; cls='badge badge-red'; bg='rgba(220,38,38,0.07)'; bc='rgba(220,38,38,0.3)'; sb.textContent='danger'; }
+  else                        { msg='Critical — full pipeline doesn\'t cover Q2. You need '+fmt(target-best)+' more MRR.'; cls='badge badge-red'; bg='rgba(220,38,38,0.07)'; bc='rgba(220,38,38,0.3)'; sb.textContent='critical'; }
   s.style.background = bg; s.style.borderColor = bc;
   st.style.color = 'var(--text)'; st.textContent = msg;
   sb.className = cls;
 }
 
+// ── SHARE SNAPSHOT ───────────────────────────────────────────────
+function exportSnapshot() {
+  const snapshot = {
+    closed: {
+      q2: parseFloat(document.getElementById('q2-closed').value) || 0,
+      q3: parseFloat(document.getElementById('q3-closed').value) || 0,
+      q4: parseFloat(document.getElementById('q4-closed').value) || 0
+    },
+    deals: deals
+  };
+  const encoded = btoa(encodeURIComponent(JSON.stringify(snapshot)));
+  const url = window.location.origin + window.location.pathname + '#data=' + encoded;
+  navigator.clipboard.writeText(url).then(() => {
+    const t = document.getElementById('share-toast');
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 2500);
+  }).catch(() => {
+    prompt('Copy this link:', url);
+  });
+}
+
+function loadFromHash() {
+  try {
+    const hash = window.location.hash;
+    if (!hash.startsWith('#data=')) return false;
+    const decoded = JSON.parse(decodeURIComponent(atob(hash.replace('#data=', ''))));
+    if (decoded.closed) {
+      if (decoded.closed.q2) document.getElementById('q2-closed').value = decoded.closed.q2;
+      if (decoded.closed.q3) document.getElementById('q3-closed').value = decoded.closed.q3;
+      if (decoded.closed.q4) document.getElementById('q4-closed').value = decoded.closed.q4;
+    }
+    if (decoded.deals) deals = decoded.deals;
+    return true;
+  } catch(e) { return false; }
+}
+
 // ── INIT ─────────────────────────────────────────────────────────
+// Try loading from shared URL first, then fall back to localStorage
+const loadedFromHash = loadFromHash();
+if (!loadedFromHash) {
+  try { deals = JSON.parse(localStorage.getItem('sd_deals') || '[]'); } catch(e) { deals = []; }
+  try {
+    const saved = JSON.parse(localStorage.getItem('sd_closed') || '{}');
+    if (saved.q2) document.getElementById('q2-closed').value = saved.q2;
+    if (saved.q3) document.getElementById('q3-closed').value = saved.q3;
+    if (saved.q4) document.getElementById('q4-closed').value = saved.q4;
+  } catch(e) {}
+}
+
 setLock(true);
+renderDeals();
 update();
 
-document.getElementById('q2-closed').addEventListener('input', update);
-document.getElementById('q3-closed').addEventListener('input', update);
-document.getElementById('q4-closed').addEventListener('input', update);
+function saveClosedMRR() {
+  localStorage.setItem('sd_closed', JSON.stringify({
+    q2: document.getElementById('q2-closed').value,
+    q3: document.getElementById('q3-closed').value,
+    q4: document.getElementById('q4-closed').value
+  }));
+}
+
+document.getElementById('q2-closed').addEventListener('input', () => { saveClosedMRR(); update(); });
+document.getElementById('q3-closed').addEventListener('input', () => { saveClosedMRR(); update(); });
+document.getElementById('q4-closed').addEventListener('input', () => { saveClosedMRR(); update(); });
 </script>
 </body>
 </html>
