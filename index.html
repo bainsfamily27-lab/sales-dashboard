@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Sales Performance Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   :root {
@@ -26,8 +26,8 @@
     --red-dim: rgba(220,38,38,0.08);
     --green: #16a34a;
     --green-dim: rgba(22,163,74,0.08);
-    --font-head: 'Syne', sans-serif;
-    --font-mono: 'DM Mono', monospace;
+    --font-head: 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'Inter', sans-serif;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -77,8 +77,8 @@
   main { padding: 2rem; max-width: 1200px; margin: 0 auto; }
 
   .section-label {
-    font-size: 0.65rem;
-    font-weight: 500;
+    font-size: 0.72rem;
+    font-weight: 600;
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -113,13 +113,13 @@
   .card.done { border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0; }
   .card.active { border-left: 3px solid var(--blue); border-radius: 0 10px 10px 0; }
 
-  .card-label { font-size: 0.68rem; color: var(--muted); margin-bottom: 5px; }
-  .card-val { font-size: 1.2rem; font-weight: 500; color: var(--text); font-family: var(--font-head); }
-  .card-sub { font-size: 0.68rem; color: var(--muted); margin-top: 3px; }
+  .card-label { font-size: 0.75rem; color: var(--muted); margin-bottom: 5px; }
+  .card-val { font-size: 1.3rem; font-weight: 600; color: var(--text); font-family: var(--font-head); }
+  .card-sub { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
 
   .badge {
     display: inline-block;
-    font-size: 0.62rem;
+    font-size: 0.7rem;
     font-weight: 500;
     padding: 2px 8px;
     border-radius: 20px;
@@ -133,7 +133,7 @@
 
   .progress-section { margin-bottom: 1.75rem; }
   .progress-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-  .progress-label { font-size: 0.68rem; color: var(--muted); min-width: 90px; }
+  .progress-label { font-size: 0.75rem; color: var(--muted); min-width: 90px; }
   .progress-track { flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
   .progress-fill { height: 100%; border-radius: 3px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
   .progress-val { font-size: 0.68rem; font-weight: 500; min-width: 52px; text-align: right; }
@@ -392,44 +392,28 @@
     </div>
   </div>
 
-  <div class="grid2">
-    <div class="panel">
-      <h3>commission by quarter — ARR basis</h3>
-      <div style="position:relative;width:100%;height:200px"><canvas id="commChart"></canvas></div>
-      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;font-size:0.65rem;color:var(--muted)">
-        <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:var(--accent)"></span>done</span>
-        <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:var(--blue)"></span>9% tier</span>
-        <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:var(--amber)"></span>13% tier</span>
-        <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:var(--green)"></span>23% tier</span>
-      </div>
-    </div>
-    <div class="panel">
-      <h3>max earnings — hit everything</h3>
-      <div class="path-row" style="background:var(--accent-dim)">
-        <span class="pr-label">Q1 commission (locked)</span>
+  <div class="panel" style="margin-bottom:1.75rem">
+    <h3>max earnings — hit everything</h3>
+    <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px">
+      <div class="path-row" style="background:var(--accent-dim);flex-direction:column;align-items:flex-start;gap:4px">
+        <span class="pr-label">Q1 commission</span>
         <span class="pr-val" style="color:var(--accent)" id="er-q1comm">—</span>
       </div>
-      <div class="path-row" style="background:var(--accent-dim)">
-        <span class="pr-label">Q1 bonus (locked)</span>
+      <div class="path-row" style="background:var(--accent-dim);flex-direction:column;align-items:flex-start;gap:4px">
+        <span class="pr-label">Q1 bonus</span>
         <span class="pr-val" style="color:var(--accent)">$3,000</span>
       </div>
-      <div class="divider"></div>
-      <div class="path-row" style="background:var(--blue-dim)">
+      <div class="path-row" style="background:var(--blue-dim);flex-direction:column;align-items:flex-start;gap:4px">
         <span class="pr-label">Q2–Q4 commission</span>
         <span class="pr-val" style="color:var(--blue)" id="er-remcomm">—</span>
       </div>
-      <div class="path-row" style="background:var(--blue-dim)">
-        <span class="pr-label">Q2–Q4 bonuses (if hit)</span>
-        <span class="pr-val" style="color:var(--blue)">$9,000</span>
+      <div class="path-row" style="background:var(--blue-dim);flex-direction:column;align-items:flex-start;gap:4px">
+        <span class="pr-label">Q2–Q4 + annual bonuses</span>
+        <span class="pr-val" style="color:var(--blue)">$19,000</span>
       </div>
-      <div class="path-row" style="background:var(--blue-dim)">
-        <span class="pr-label">Annual bonus (if hit)</span>
-        <span class="pr-val" style="color:var(--blue)">$10,000</span>
-      </div>
-      <div class="divider"></div>
-      <div class="path-row" style="background:var(--green-dim)">
-        <span class="pr-label" style="color:var(--text);font-weight:500">Total (hit everything)</span>
-        <span class="pr-val" style="color:var(--green);font-size:1rem" id="er-grand">—</span>
+      <div class="path-row" style="background:var(--green-dim);flex-direction:column;align-items:flex-start;gap:4px">
+        <span class="pr-label" style="font-weight:600;color:var(--text)">Total</span>
+        <span class="pr-val" style="color:var(--green);font-size:1.1rem" id="er-grand">—</span>
       </div>
     </div>
   </div>
@@ -538,7 +522,7 @@ async function loadData() {
 }
 
 function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
-function pct(a,b) { return b > 0 ? Math.min(100, Math.round(a/b*100)) : 0; }
+function pct(a,b) { return b > 0 ? Math.round(a/b*100) : 0; }
 
 function calcComm(mrr) {
   if (!DATA || mrr <= 0) return 0;
@@ -636,22 +620,7 @@ function update() {
     else colors.push('#60a5fa');
   }
 
-  if (commChart) commChart.destroy();
-  commChart = new Chart(document.getElementById('commChart'), {
-    type: 'bar',
-    data: {
-      labels: ['Q1 (done)', 'Q2', 'Q3', 'Q4'],
-      datasets: [{ data: qComm, backgroundColor: colors, borderRadius: 5, borderSkipped: false }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmt(c.parsed.y) }, backgroundColor: '#ffffff', titleColor: '#7a7d85', bodyColor: '#1a1b1e', borderColor: 'rgba(0,0,0,0.1)', borderWidth: 1 } },
-      scales: {
-        x: { ticks: { color: '#7a7d85', font: { size: 11, family: "'DM Mono', monospace" } }, grid: { display: false }, border: { color: 'rgba(0,0,0,0.08)' } },
-        y: { ticks: { color: '#7a7d85', font: { size: 10, family: "'DM Mono', monospace" }, callback: v => fmt(v) }, grid: { color: 'rgba(0,0,0,0.05)' }, border: { display: false } }
-      }
-    }
-  });
+  // chart removed
 
   const remComm = Math.max(0, calcComm(Q.annual) - calcComm(totalClosed));
   document.getElementById('er-remcomm').textContent = fmt(remComm);
