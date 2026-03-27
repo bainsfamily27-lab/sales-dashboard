@@ -420,8 +420,19 @@
 
   <div class="section-label">Q2 pipeline tracker</div>
   <div class="pipeline-section">
-    <div class="deal-add">
+    <div class="deal-add" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1.2fr) minmax(0,0.7fr) minmax(0,1fr) auto">
       <input type="text" id="deal-name" placeholder="Deal name (e.g. Foodliner)" />
+      <select id="deal-product">
+        <option value="Synergize">Synergize</option>
+        <option value="Synergize with IDP">Synergize with IDP</option>
+        <option value="IDP Only">IDP Only</option>
+        <option value="Broker WF AI - TL">Broker WF AI - TL</option>
+        <option value="Broker WF AI - LTL">Broker WF AI - LTL</option>
+        <option value="Carrier WF AI">Carrier WF AI</option>
+        <option value="Mobile Only">Mobile Only</option>
+        <option value="Geotab Only">Geotab Only</option>
+        <option value="Mobile + Geotab">Mobile + Geotab</option>
+      </select>
       <input type="number" id="deal-mrr" placeholder="MRR $" min="0" step="100" />
       <select id="deal-sentiment">
         <option value="high">High — nearly done</option>
@@ -434,7 +445,7 @@
     <div id="deal-list-wrap" style="display:none;margin-bottom:1rem">
       <table class="deal-table">
         <thead><tr>
-          <th>Deal</th><th>MRR</th><th>ARR</th><th>Sentiment</th><th></th>
+          <th>Deal</th><th>Product</th><th>MRR</th><th>ARR</th><th>Sentiment</th><th></th>
         </tr></thead>
         <tbody id="deal-tbody"></tbody>
       </table>
@@ -647,10 +658,11 @@ function sentimentLabel(s) {
 
 function addDeal() {
   const name = document.getElementById('deal-name').value.trim();
+  const product = document.getElementById('deal-product').value;
   const mrr = parseFloat(document.getElementById('deal-mrr').value) || 0;
   const sentiment = document.getElementById('deal-sentiment').value;
   if (!name || mrr <= 0) return;
-  deals.push({ id: Date.now(), name, mrr, sentiment });
+  deals.push({ id: Date.now(), name, product, mrr, sentiment });
   document.getElementById('deal-name').value = '';
   document.getElementById('deal-mrr').value = '';
   renderDeals();
@@ -663,6 +675,23 @@ function removeDeal(id) {
   updatePipeline();
 }
 
+const productColors = {
+  'Synergize': '#2563eb',
+  'Synergize with IDP': '#7c3aed',
+  'IDP Only': '#9333ea',
+  'Broker WF AI - TL': '#0891b2',
+  'Broker WF AI - LTL': '#0e7490',
+  'Carrier WF AI': '#0369a1',
+  'Mobile Only': '#d97706',
+  'Geotab Only': '#16a34a',
+  'Mobile + Geotab': '#15803d'
+};
+
+function productBadge(p) {
+  const col = productColors[p] || '#7a7d85';
+  return `<span style="display:inline-block;font-size:0.65rem;font-weight:500;padding:2px 7px;border-radius:20px;background:${col}18;color:${col};border:1px solid ${col}44">${p}</span>`;
+}
+
 function renderDeals() {
   const tbody = document.getElementById('deal-tbody');
   const wrap = document.getElementById('deal-list-wrap');
@@ -671,6 +700,7 @@ function renderDeals() {
   tbody.innerHTML = deals.map(d => `
     <tr>
       <td style="font-weight:500">${d.name}</td>
+      <td>${productBadge(d.product || '—')}</td>
       <td>${fmt(d.mrr)}</td>
       <td style="color:var(--muted)">${fmt(d.mrr * 12)}</td>
       <td>${sentimentLabel(d.sentiment)}</td>
