@@ -314,7 +314,14 @@
     <h1 id="dash-title">Sales Performance Dashboard</h1>
     <div class="sub" id="dash-sub">Loading...</div>
   </div>
-  <div class="year-badge" id="year-badge">2026</div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div id="lock-bar" style="display:flex;align-items:center;gap:8px">
+      <input type="password" id="pw-input" placeholder="Enter password to edit" style="width:180px;font-size:0.75rem;padding:6px 12px" />
+      <button onclick="tryUnlock()" style="font-family:var(--font-mono);font-size:0.72rem;background:var(--accent-dim2);border:1px solid rgba(37,99,235,0.3);color:var(--accent);border-radius:7px;padding:6px 14px;cursor:pointer">Unlock</button>
+      <span id="lock-status" style="font-size:0.7rem;color:var(--muted)">view only</span>
+    </div>
+    <div class="year-badge" id="year-badge">2026</div>
+  </div>
 </header>
 
 <main>
@@ -393,27 +400,30 @@
   </div>
 
   <div class="panel" style="margin-bottom:1.75rem">
-    <h3>max earnings — hit everything</h3>
-    <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px">
-      <div class="path-row" style="background:var(--accent-dim);flex-direction:column;align-items:flex-start;gap:4px">
-        <span class="pr-label">Q1 commission</span>
-        <span class="pr-val" style="color:var(--accent)" id="er-q1comm">—</span>
+    <h3>max earnings from where you are today</h3>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+      <div style="background:var(--accent-dim);border-radius:10px;padding:14px">
+        <div style="font-size:0.7rem;font-weight:600;color:var(--accent);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em">Already earned (locked)</div>
+        <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:5px"><span style="color:var(--muted)">Commission to date</span><span style="font-weight:600" id="er-earned-comm">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:5px"><span style="color:var(--muted)">Bonuses earned</span><span style="font-weight:600" id="er-earned-bonus">—</span></div>
+        <div style="border-top:1px solid rgba(37,99,235,0.15);margin-top:8px;padding-top:8px;display:flex;justify-content:space-between">
+          <span style="font-size:0.8rem;font-weight:600;color:var(--text)">Subtotal</span>
+          <span style="font-size:1rem;font-weight:700;color:var(--accent)" id="er-earned-total">—</span>
+        </div>
       </div>
-      <div class="path-row" style="background:var(--accent-dim);flex-direction:column;align-items:flex-start;gap:4px">
-        <span class="pr-label">Q1 bonus</span>
-        <span class="pr-val" style="color:var(--accent)">$3,000</span>
+      <div style="background:var(--blue-dim);border-radius:10px;padding:14px">
+        <div style="font-size:0.7rem;font-weight:600;color:var(--blue);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em">Still available (if you hit remaining)</div>
+        <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:5px"><span style="color:var(--muted)">Remaining commission</span><span style="font-weight:600" id="er-rem-comm">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:5px"><span style="color:var(--muted)">Remaining bonuses</span><span style="font-weight:600" id="er-rem-bonus">—</span></div>
+        <div style="border-top:1px solid rgba(37,99,235,0.15);margin-top:8px;padding-top:8px;display:flex;justify-content:space-between">
+          <span style="font-size:0.8rem;font-weight:600;color:var(--text)">Subtotal</span>
+          <span style="font-size:1rem;font-weight:700;color:var(--blue)" id="er-rem-total">—</span>
+        </div>
       </div>
-      <div class="path-row" style="background:var(--blue-dim);flex-direction:column;align-items:flex-start;gap:4px">
-        <span class="pr-label">Q2–Q4 commission</span>
-        <span class="pr-val" style="color:var(--blue)" id="er-remcomm">—</span>
-      </div>
-      <div class="path-row" style="background:var(--blue-dim);flex-direction:column;align-items:flex-start;gap:4px">
-        <span class="pr-label">Q2–Q4 + annual bonuses</span>
-        <span class="pr-val" style="color:var(--blue)">$19,000</span>
-      </div>
-      <div class="path-row" style="background:var(--green-dim);flex-direction:column;align-items:flex-start;gap:4px">
-        <span class="pr-label" style="font-weight:600;color:var(--text)">Total</span>
-        <span class="pr-val" style="color:var(--green);font-size:1.1rem" id="er-grand">—</span>
+      <div style="background:var(--green-dim);border-radius:10px;padding:14px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+        <div style="font-size:0.7rem;font-weight:600;color:var(--green);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em">Your max total for 2026</div>
+        <div style="font-size:2rem;font-weight:700;color:var(--green)" id="er-grand">—</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:4px">earned + everything still possible</div>
       </div>
     </div>
   </div>
@@ -501,6 +511,40 @@
 let DATA = null;
 let deals = [];
 let commChart = null;
+let isUnlocked = false;
+
+const PW = 'ajax123';
+
+function tryUnlock() {
+  const val = document.getElementById('pw-input').value;
+  if (val === PW) {
+    isUnlocked = true;
+    document.getElementById('lock-bar').innerHTML = '<span style="font-size:0.72rem;font-weight:600;color:var(--green)">Editing unlocked</span>';
+    setEditingState(true);
+  } else {
+    const st = document.getElementById('lock-status');
+    st.textContent = 'wrong password';
+    st.style.color = 'var(--red)';
+    setTimeout(() => { st.textContent = 'view only'; st.style.color = 'var(--muted)'; }, 2000);
+  }
+}
+
+function setEditingState(unlocked) {
+  const editInputs = ['q2-closed', 'q3-closed', 'q4-closed'];
+  editInputs.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.disabled = !unlocked; el.style.opacity = unlocked ? '1' : '0.5'; el.style.cursor = unlocked ? 'auto' : 'not-allowed'; }
+  });
+  const addBtn = document.querySelector('button.add-btn');
+  if (addBtn) { addBtn.disabled = !unlocked; addBtn.style.opacity = unlocked ? '1' : '0.5'; addBtn.style.cursor = unlocked ? 'pointer' : 'not-allowed'; }
+  document.querySelectorAll('.del-btn').forEach(b => { b.disabled = !unlocked; b.style.opacity = unlocked ? '1' : '0.4'; });
+  ['deal-name','deal-mrr','deal-product','deal-sentiment'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.disabled = !unlocked; el.style.opacity = unlocked ? '1' : '0.5'; }
+  });
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && document.getElementById('pw-input') === document.activeElement) tryUnlock(); });
 
 async function loadData() {
   try {
@@ -529,6 +573,7 @@ async function loadData() {
 
   deals = DATA.pipeline ? [...DATA.pipeline] : [];
   renderDeals();
+  setEditingState(false);
   update();
 }
 
@@ -633,9 +678,38 @@ function update() {
 
   // chart removed
 
+  // commission earned so far (on actual closed MRR)
+  const commEarnedSoFar = Math.round(calcComm(totalClosed));
+
+  // bonuses already earned — Q1 hit so $3k locked; add more as quarters close
+  let bonusesEarned = 0;
+  if (q1c >= Q.q1) bonusesEarned += B.quarterly;
+  if (q2c >= Q.q2) bonusesEarned += B.quarterly;
+  if (q3c >= Q.q3) bonusesEarned += B.quarterly;
+  if (q4c >= Q.q4) bonusesEarned += B.quarterly;
+  if (totalClosed >= Q.annual) bonusesEarned += B.annual;
+
+  // remaining commission if you hit rest of annual quota from here
   const remComm = Math.max(0, calcComm(Q.annual) - calcComm(totalClosed));
-  document.getElementById('er-remcomm').textContent = fmt(remComm);
-  document.getElementById('er-grand').textContent = fmt(q1comm + q2CommSoFar + remComm + (B.quarterly * 3) + B.annual);
+
+  // remaining bonuses still available
+  let bonusesRem = 0;
+  if (q2c < Q.q2) bonusesRem += B.quarterly;
+  if (q3c < Q.q3) bonusesRem += B.quarterly;
+  if (q4c < Q.q4) bonusesRem += B.quarterly;
+  if (totalClosed < Q.annual) bonusesRem += B.annual;
+
+  const earnedTotal = commEarnedSoFar + bonusesEarned;
+  const remTotal = Math.round(remComm) + bonusesRem;
+  const grandTotal = earnedTotal + remTotal;
+
+  document.getElementById('er-earned-comm').textContent = fmt(commEarnedSoFar);
+  document.getElementById('er-earned-bonus').textContent = fmt(bonusesEarned);
+  document.getElementById('er-earned-total').textContent = fmt(earnedTotal);
+  document.getElementById('er-rem-comm').textContent = fmt(Math.round(remComm));
+  document.getElementById('er-rem-bonus').textContent = fmt(bonusesRem);
+  document.getElementById('er-rem-total').textContent = fmt(remTotal);
+  document.getElementById('er-grand').textContent = fmt(grandTotal);
 
   const accPct = Math.min(100, totalClosed / thresh75 * 100);
   document.getElementById('acc-thresh').textContent = fmt(thresh75);
@@ -707,6 +781,7 @@ function renderDeals() {
       <td><button class="del-btn" onclick="removeDeal(${d.id})">x</button></td>
     </tr>
   `).join('');
+  if (!isUnlocked) setEditingState(false);
 }
 
 function updatePipeline() {
