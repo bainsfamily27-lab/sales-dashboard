@@ -533,14 +533,20 @@ function setEditingState(unlocked) {
   const editInputs = ['q2-closed', 'q3-closed', 'q4-closed'];
   editInputs.forEach(id => {
     const el = document.getElementById(id);
-    if (el) { el.disabled = !unlocked; el.style.opacity = unlocked ? '1' : '0.5'; el.style.cursor = unlocked ? 'auto' : 'not-allowed'; }
+    if (el) {
+      if (unlocked) { el.removeAttribute('readonly'); el.style.opacity = '1'; el.style.cursor = 'auto'; }
+      else { el.setAttribute('readonly', true); el.style.opacity = '0.6'; el.style.cursor = 'not-allowed'; }
+    }
   });
   const addBtn = document.querySelector('button.add-btn');
   if (addBtn) { addBtn.disabled = !unlocked; addBtn.style.opacity = unlocked ? '1' : '0.5'; addBtn.style.cursor = unlocked ? 'pointer' : 'not-allowed'; }
   document.querySelectorAll('.del-btn').forEach(b => { b.disabled = !unlocked; b.style.opacity = unlocked ? '1' : '0.4'; });
   ['deal-name','deal-mrr','deal-product','deal-sentiment'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) { el.disabled = !unlocked; el.style.opacity = unlocked ? '1' : '0.5'; }
+    if (el) {
+      if (unlocked) { el.removeAttribute('readonly'); el.removeAttribute('disabled'); el.style.opacity = '1'; }
+      else { el.setAttribute('disabled', true); el.style.opacity = '0.5'; }
+    }
   });
 }
 
@@ -603,7 +609,7 @@ function update() {
   const B = DATA.bonuses;
   const thresh75 = Q.annual * DATA.commission.accelerated_threshold_pct;
 
-  const q1c = parseFloat(document.getElementById('q1-closed').value) || DATA.closed.q1;
+  const q1c = DATA.closed.q1;
   const q2c = parseFloat(document.getElementById('q2-closed').value) || 0;
   const q3c = parseFloat(document.getElementById('q3-closed').value) || 0;
   const q4c = parseFloat(document.getElementById('q4-closed').value) || 0;
@@ -618,7 +624,6 @@ function update() {
   document.getElementById('q1-badge').className = 'badge ' + (q1att >= 100 ? 'badge-green' : 'badge-amber');
   const q1comm = Math.round(calcComm(q1c));
   document.getElementById('q1-comm').textContent = fmt(q1comm);
-  document.getElementById('er-q1comm').textContent = fmt(q1comm);
 
   document.getElementById('q2-mrr-disp').textContent = fmt(q2c);
   document.getElementById('q2-arr-disp').textContent = fmt(q2c * 12) + ' ARR';
