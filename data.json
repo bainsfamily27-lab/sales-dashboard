@@ -31,6 +31,7 @@
     {
       "id": 1,
       "name": "Example Deal A",
+      "product": "Synergize",
       "mrr": 3500,
       "sentiment": "high",
       "quarter": "Q2"
@@ -38,6 +39,7 @@
     {
       "id": 2,
       "name": "Example Deal B",
+      "product": "Geotab Only",
       "mrr": 2200,
       "sentiment": "med",
       "quarter": "Q2"
@@ -45,6 +47,7 @@
     {
       "id": 3,
       "name": "Example Deal C",
+      "product": "IDP Only",
       "mrr": 1800,
       "sentiment": "low",
       "quarter": "Q2"
