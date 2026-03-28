@@ -207,7 +207,7 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
   <!-- 3. PIPELINE TRACKER ──────────────────────────────── -->
   <div class="section-label">Q2 pipeline tracker</div>
   <div style="margin-bottom:1.5rem">
-    <div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1.2fr) minmax(0,0.7fr) minmax(0,0.9fr) minmax(0,1.5fr) auto;gap:8px;margin-bottom:1rem;align-items:end">
+    <div id="deal-add-form" style="display:none;grid-template-columns:minmax(0,1.4fr) minmax(0,1.2fr) minmax(0,0.7fr) minmax(0,0.9fr) minmax(0,1.5fr) auto;gap:8px;margin-bottom:1rem;align-items:end">
       <div>
         <label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">Deal name</label>
         <input type="text" id="deal-name" placeholder="e.g. Foodliner" />
@@ -419,6 +419,8 @@ function tryUnlock() {
 }
 
 function setLock(locked) {
+  const form = document.getElementById('deal-add-form');
+  if (form) form.style.display = locked ? 'none' : 'grid';
   ['q2-closed','q3-closed','q4-closed'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
