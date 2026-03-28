@@ -156,53 +156,7 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
 
 <main>
 
-  <!-- ── QUARTERLY INPUTS ─────────────────────────────── -->
-  <div class="section-label">closed MRR by quarter</div>
-  <div class="q-inputs">
-    <div class="q-input-item">
-      <label>Q1 (Jan–Mar) — locked</label>
-      <input type="number" id="q1-closed" value="11417" readonly style="opacity:0.55;cursor:not-allowed" />
-    </div>
-    <div class="q-input-item">
-      <label>Q2 (Apr–Jun)</label>
-      <input type="number" id="q2-closed" value="0" min="0" step="100" placeholder="0" />
-    </div>
-    <div class="q-input-item">
-      <label>Q3 (Jul–Sep)</label>
-      <input type="number" id="q3-closed" value="0" min="0" step="100" placeholder="0" />
-    </div>
-    <div class="q-input-item">
-      <label>Q4 (Oct–Dec)</label>
-      <input type="number" id="q4-closed" value="0" min="0" step="100" placeholder="0" />
-    </div>
-  </div>
-
-  <!-- ── Q1 LOCKED ────────────────────────────────────── -->
-  <div class="section-label">Q1 — locked</div>
-  <div class="grid4">
-    <div class="card done">
-      <div class="card-label">Closed MRR</div>
-      <div class="card-val" id="q1-mrr-disp">—</div>
-      <div class="card-sub" id="q1-arr-disp">—</div>
-    </div>
-    <div class="card done">
-      <div class="card-label">Attainment</div>
-      <div class="card-val" id="q1-att">—</div>
-      <div class="card-sub"><span class="badge" id="q1-badge">—</span></div>
-    </div>
-    <div class="card done">
-      <div class="card-label">Commission earned</div>
-      <div class="card-val" id="q1-comm">—</div>
-      <div class="card-sub">ARR × 9%</div>
-    </div>
-    <div class="card done">
-      <div class="card-label">Q1 bonus</div>
-      <div class="card-val">$3,000</div>
-      <div class="card-sub"><span class="badge badge-green">locked</span></div>
-    </div>
-  </div>
-
-  <!-- ── Q2 LIVE ───────────────────────────────────────── -->
+  <!-- 1. Q2 LIVE ───────────────────────────────────────── -->
   <div class="section-label">Q2 — live (Apr–Jun 2026)</div>
   <div class="grid4">
     <div class="card active">
@@ -227,92 +181,32 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
     </div>
   </div>
 
-  <!-- ── Q3 & Q4 ───────────────────────────────────────── -->
-  <div class="section-label">Q3 &amp; Q4 — tracking</div>
+  <!-- 2. ANNUAL SUMMARY ───────────────────────────────── -->
+  <div class="section-label">annual — 2026</div>
   <div class="grid4">
-    <div class="card">
-      <div class="card-label">Q3 closed (MRR)</div>
-      <div class="card-val" id="q3-mrr-disp">$0</div>
-      <div class="card-sub" id="q3-sub">—</div>
+    <div class="card" style="border-left:3px solid var(--accent);border-radius:0 10px 10px 0">
+      <div class="card-label">Closed to date (MRR)</div>
+      <div class="card-val" id="ann-closed">—</div>
+      <div class="card-sub" id="ann-closed-arr">— ARR</div>
     </div>
-    <div class="card">
-      <div class="card-label">Q3 target</div>
-      <div class="card-val">$14,391</div>
-      <div class="card-sub"><span class="badge badge-muted" id="q3-badge">upcoming</span></div>
+    <div class="card" style="border-left:3px solid var(--accent);border-radius:0 10px 10px 0">
+      <div class="card-label">Annual attainment</div>
+      <div class="card-val" id="ann-att">—</div>
+      <div class="card-sub"><span class="badge" id="ann-badge">—</span></div>
     </div>
-    <div class="card">
-      <div class="card-label">Q4 closed (MRR)</div>
-      <div class="card-val" id="q4-mrr-disp">$0</div>
-      <div class="card-sub" id="q4-sub">—</div>
+    <div class="card" style="border-left:3px solid var(--amber);border-radius:0 10px 10px 0">
+      <div class="card-label">Still needed (MRR)</div>
+      <div class="card-val" id="ann-need">—</div>
+      <div class="card-sub">to hit $49,709 annual</div>
     </div>
-    <div class="card">
-      <div class="card-label">Q4 target</div>
-      <div class="card-val">$15,423</div>
-      <div class="card-sub"><span class="badge badge-muted" id="q4-badge">upcoming</span></div>
-    </div>
-  </div>
-
-  <!-- ── ANNUAL PROGRESS ───────────────────────────────── -->
-  <div class="section-label">annual MRR progress</div>
-  <div class="progress-section">
-    <div class="progress-row">
-      <div class="progress-label">Q1 (done)</div>
-      <div class="progress-track"><div class="progress-fill" id="pb-q1" style="background:var(--green)"></div></div>
-      <div class="progress-val" style="color:var(--green)" id="pv-q1">$11,417</div>
-    </div>
-    <div class="progress-row">
-      <div class="progress-label">Q2</div>
-      <div class="progress-track"><div class="progress-fill" id="pb-q2" style="background:var(--accent)"></div></div>
-      <div class="progress-val" style="color:var(--accent)" id="pv-q2">$0</div>
-    </div>
-    <div class="progress-row">
-      <div class="progress-label">Q3</div>
-      <div class="progress-track"><div class="progress-fill" id="pb-q3" style="background:#94a3b8"></div></div>
-      <div class="progress-val" style="color:var(--muted)" id="pv-q3">$14,391 tgt</div>
-    </div>
-    <div class="progress-row">
-      <div class="progress-label">Q4</div>
-      <div class="progress-track"><div class="progress-fill" id="pb-q4" style="background:#94a3b8"></div></div>
-      <div class="progress-val" style="color:var(--muted)" id="pv-q4">$15,423 tgt</div>
-    </div>
-    <div class="progress-row" style="border-top:1px solid var(--border);padding-top:10px;margin-top:4px">
-      <div class="progress-label" style="font-weight:600;color:var(--text)">Annual total</div>
-      <div class="progress-track" style="height:12px;border-radius:6px"><div class="progress-fill" id="pb-annual" style="background:var(--accent);height:12px;border-radius:6px"></div></div>
-      <div class="progress-val" style="color:var(--accent);font-weight:700" id="pv-annual">23%</div>
+    <div class="card" style="border-left:3px solid var(--amber);border-radius:0 10px 10px 0">
+      <div class="card-label">Annual bonus status</div>
+      <div class="card-val">$10,000</div>
+      <div class="card-sub"><span class="badge" id="ann-bonus-badge">—</span></div>
     </div>
   </div>
 
-  <!-- ── MAX EARNINGS ──────────────────────────────────── -->
-  <div class="section-label">max earnings from where you are today</div>
-  <div class="panel" style="margin-bottom:1.5rem">
-    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
-      <div style="background:var(--green-dim);border-radius:10px;padding:14px">
-        <div style="font-size:0.68rem;font-weight:700;color:var(--green);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.06em">Already earned</div>
-        <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:6px"><span style="color:var(--muted)">Commission to date</span><span style="font-weight:600" id="er-earned-comm">—</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:6px"><span style="color:var(--muted)">Bonuses earned</span><span style="font-weight:600" id="er-earned-bonus">—</span></div>
-        <div style="border-top:1px solid rgba(22,163,74,0.2);margin-top:8px;padding-top:8px;display:flex;justify-content:space-between;align-items:baseline">
-          <span style="font-size:0.78rem;font-weight:600">Subtotal</span>
-          <span style="font-size:1.1rem;font-weight:700;color:var(--green)" id="er-earned-total">—</span>
-        </div>
-      </div>
-      <div style="background:var(--blue-dim);border-radius:10px;padding:14px">
-        <div style="font-size:0.68rem;font-weight:700;color:var(--accent);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.06em">Still available</div>
-        <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:6px"><span style="color:var(--muted)">Remaining commission</span><span style="font-weight:600" id="er-rem-comm">—</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:6px"><span style="color:var(--muted)">Remaining bonuses</span><span style="font-weight:600" id="er-rem-bonus">—</span></div>
-        <div style="border-top:1px solid rgba(37,99,235,0.2);margin-top:8px;padding-top:8px;display:flex;justify-content:space-between;align-items:baseline">
-          <span style="font-size:0.78rem;font-weight:600">Subtotal</span>
-          <span style="font-size:1.1rem;font-weight:700;color:var(--accent)" id="er-rem-total">—</span>
-        </div>
-      </div>
-      <div style="background:var(--accent-dim2);border-radius:10px;padding:14px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
-        <div style="font-size:0.68rem;font-weight:700;color:var(--accent);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.06em">Your max total 2026</div>
-        <div style="font-size:2.2rem;font-weight:800;color:var(--accent);font-family:var(--font-head)" id="er-grand">—</div>
-        <div style="font-size:0.7rem;color:var(--muted);margin-top:6px">earned + everything still possible</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── PIPELINE TRACKER ──────────────────────────────── -->
+  <!-- 3. PIPELINE TRACKER ──────────────────────────────── -->
   <div class="section-label">Q2 pipeline tracker</div>
   <div style="margin-bottom:1.5rem">
     <div class="deal-add">
@@ -388,7 +282,7 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
     </div>
   </div>
 
-  <!-- ── 13% ACCELERATOR ───────────────────────────────── -->
+  <!-- 4. 13% ACCELERATOR ───────────────────────────────── -->
   <div class="section-label">13% accelerator tracker</div>
   <div class="panel" style="margin-bottom:1.5rem">
     <div class="acc-grid">
@@ -401,6 +295,77 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
       <div class="progress-fill" id="acc-bar" style="background:var(--amber);height:12px;border-radius:6px;width:30.6%"></div>
     </div>
     <div style="font-size:0.7rem;color:var(--muted);margin-top:6px;font-weight:500" id="acc-label">30.6% toward 13% accelerator rate</div>
+  </div>
+
+  <!-- 5. Q1 LOCKED ────────────────────────────────────── -->
+  <div class="section-label">Q1 — locked</div>
+  <div class="grid4">
+    <div class="card done">
+      <div class="card-label">Closed MRR</div>
+      <div class="card-val" id="q1-mrr-disp">—</div>
+      <div class="card-sub" id="q1-arr-disp">—</div>
+    </div>
+    <div class="card done">
+      <div class="card-label">Attainment</div>
+      <div class="card-val" id="q1-att">—</div>
+      <div class="card-sub"><span class="badge" id="q1-badge">—</span></div>
+    </div>
+    <div class="card done">
+      <div class="card-label">Commission earned</div>
+      <div class="card-val" id="q1-comm">—</div>
+      <div class="card-sub">ARR × 9%</div>
+    </div>
+    <div class="card done">
+      <div class="card-label">Q1 bonus</div>
+      <div class="card-val">$3,000</div>
+      <div class="card-sub"><span class="badge badge-green">locked</span></div>
+    </div>
+  </div>
+
+  <!-- 6. Q3 & Q4 ───────────────────────────────────────── -->
+  <div class="section-label">Q3 &amp; Q4 — tracking</div>
+  <div class="grid4">
+    <div class="card">
+      <div class="card-label">Q3 closed (MRR)</div>
+      <div class="card-val" id="q3-mrr-disp">$0</div>
+      <div class="card-sub" id="q3-sub">—</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Q3 target</div>
+      <div class="card-val">$14,391</div>
+      <div class="card-sub"><span class="badge badge-muted" id="q3-badge">upcoming</span></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Q4 closed (MRR)</div>
+      <div class="card-val" id="q4-mrr-disp">$0</div>
+      <div class="card-sub" id="q4-sub">—</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Q4 target</div>
+      <div class="card-val">$15,423</div>
+      <div class="card-sub"><span class="badge badge-muted" id="q4-badge">upcoming</span></div>
+    </div>
+  </div>
+
+  <!-- 7. CLOSED MRR INPUTS ────────────────────────────── -->
+  <div class="section-label">closed MRR by quarter</div>
+  <div class="q-inputs" style="margin-bottom:0">
+    <div class="q-input-item">
+      <label>Q1 (Jan–Mar) — locked</label>
+      <input type="number" id="q1-closed" value="11417" readonly style="opacity:0.55;cursor:not-allowed" />
+    </div>
+    <div class="q-input-item">
+      <label>Q2 (Apr–Jun)</label>
+      <input type="number" id="q2-closed" value="0" min="0" step="100" placeholder="0" />
+    </div>
+    <div class="q-input-item">
+      <label>Q3 (Jul–Sep)</label>
+      <input type="number" id="q3-closed" value="0" min="0" step="100" placeholder="0" />
+    </div>
+    <div class="q-input-item">
+      <label>Q4 (Oct–Dec)</label>
+      <input type="number" id="q4-closed" value="0" min="0" step="100" placeholder="0" />
+    </div>
   </div>
 
 </main>
@@ -515,43 +480,22 @@ function update() {
   q4b.className = 'badge ' + (q4c > 0 ? q4bc : 'badge-muted');
   q4b.textContent = q4c > 0 ? q4bt : 'upcoming';
 
-  // Progress bars
-  const pb = (v) => Math.min(100, v / QUOTA.annual * 100).toFixed(1) + '%';
-  document.getElementById('pb-q1').style.width = pb(q1c);
-  document.getElementById('pv-q1').textContent = fmt(q1c);
-  document.getElementById('pb-q2').style.width = pb(q2c);
-  document.getElementById('pv-q2').textContent = q2c > 0 ? fmt(q2c) : '$0';
-  document.getElementById('pb-q3').style.width = pb(q3c);
-  document.getElementById('pv-q3').textContent = q3c > 0 ? fmt(q3c) : '$14,391 tgt';
-  document.getElementById('pb-q4').style.width = pb(q4c);
-  document.getElementById('pv-q4').textContent = q4c > 0 ? fmt(q4c) : '$15,423 tgt';
-  const annPct = pct(total, QUOTA.annual);
-  document.getElementById('pb-annual').style.width = Math.min(100, annPct) + '%';
-  document.getElementById('pv-annual').textContent = annPct + '%';
-
-  // Max earnings
-  const commEarned = Math.round(calcComm(total));
-  let bonusEarned = 0;
-  if (q1c >= QUOTA.q1) bonusEarned += BONUS.quarterly;
-  if (q2c >= QUOTA.q2) bonusEarned += BONUS.quarterly;
-  if (q3c >= QUOTA.q3) bonusEarned += BONUS.quarterly;
-  if (q4c >= QUOTA.q4) bonusEarned += BONUS.quarterly;
-  if (total >= QUOTA.annual) bonusEarned += BONUS.annual;
-
-  const remComm = Math.max(0, Math.round(calcComm(QUOTA.annual) - calcComm(total)));
-  let bonusRem = 0;
-  if (q2c < QUOTA.q2) bonusRem += BONUS.quarterly;
-  if (q3c < QUOTA.q3) bonusRem += BONUS.quarterly;
-  if (q4c < QUOTA.q4) bonusRem += BONUS.quarterly;
-  if (total < QUOTA.annual) bonusRem += BONUS.annual;
-
-  document.getElementById('er-earned-comm').textContent = fmt(commEarned);
-  document.getElementById('er-earned-bonus').textContent = fmt(bonusEarned);
-  document.getElementById('er-earned-total').textContent = fmt(commEarned + bonusEarned);
-  document.getElementById('er-rem-comm').textContent = fmt(remComm);
-  document.getElementById('er-rem-bonus').textContent = fmt(bonusRem);
-  document.getElementById('er-rem-total').textContent = fmt(remComm + bonusRem);
-  document.getElementById('er-grand').textContent = fmt(commEarned + bonusEarned + remComm + bonusRem);
+  // Annual summary cards
+  const annAtt = pct(total, QUOTA.annual);
+  document.getElementById('ann-closed').textContent = fmt(total);
+  document.getElementById('ann-closed-arr').textContent = fmt(total * 12) + ' ARR';
+  document.getElementById('ann-att').textContent = annAtt + '%';
+  const annB = document.getElementById('ann-badge');
+  const [annBc, annBt] = attBadge(annAtt);
+  annB.className = 'badge ' + annBc; annB.textContent = annBt;
+  const annNeed = Math.max(0, QUOTA.annual - total);
+  document.getElementById('ann-need').textContent = annNeed > 0 ? fmt(annNeed) : '$0 — done!';
+  const annBonusBadge = document.getElementById('ann-bonus-badge');
+  if (total >= QUOTA.annual) {
+    annBonusBadge.className = 'badge badge-green'; annBonusBadge.textContent = 'earned!';
+  } else {
+    annBonusBadge.className = 'badge badge-amber'; annBonusBadge.textContent = fmt(annNeed) + ' MRR away';
+  }
 
   // Accelerator
   const accPct = Math.min(100, total / T75 * 100);
