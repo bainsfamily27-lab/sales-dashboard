@@ -634,7 +634,7 @@ function showStatus(msg, col) {
   const el = document.getElementById('save-status');
   if (!el) return;
   el.textContent = msg; el.style.color = col || 'var(--muted)';
-  setTimeout(() => { el.textContent = ''; }, 3000);
+  if (msg) setTimeout(() => { el.textContent = ''; }, 3000);
 }
 
 async function loadFromSheets() {
@@ -648,12 +648,14 @@ async function loadFromSheets() {
     const closedData = await closedRes.json();
     if (dealsData.deals) deals = dealsData.deals;
     if (closedData.closed) {
-      if (closedData.closed.q2) document.getElementById('q2-closed').value = closedData.closed.q2;
-      if (closedData.closed.q3) document.getElementById('q3-closed').value = closedData.closed.q3;
-      if (closedData.closed.q4) document.getElementById('q4-closed').value = closedData.closed.q4;
+      if (closedData.closed.q2 !== undefined) document.getElementById('q2-closed').value = closedData.closed.q2;
+      if (closedData.closed.q3 !== undefined) document.getElementById('q3-closed').value = closedData.closed.q3;
+      if (closedData.closed.q4 !== undefined) document.getElementById('q4-closed').value = closedData.closed.q4;
     }
     showStatus('', '');
-  } catch(e) { showStatus('Could not load data', 'var(--red)'); }
+  } catch(e) {
+    showStatus('Could not load — check connection', 'var(--red)');
+  }
   renderDeals();
   update();
 }
@@ -661,18 +663,21 @@ async function loadFromSheets() {
 async function saveDealsToSheets() {
   try {
     showStatus('Saving...', 'var(--amber)');
-    await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'saveDeals', deals }) });
-    showStatus('Saved', 'var(--green)');
+    const url = API + '?action=saveDeals&data=' + encodeURIComponent(JSON.stringify(deals));
+    await fetch(url, { method: 'GET', mode: 'no-cors' });
+    showStatus('Saved ✓', 'var(--green)');
   } catch(e) { showStatus('Save failed', 'var(--red)'); }
 }
 
 async function saveClosedToSheets() {
   try {
-    await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'saveClosed', closed: {
+    const closed = {
       q2: parseFloat(document.getElementById('q2-closed').value) || 0,
       q3: parseFloat(document.getElementById('q3-closed').value) || 0,
       q4: parseFloat(document.getElementById('q4-closed').value) || 0
-    }})});
+    };
+    const url = API + '?action=saveClosed&data=' + encodeURIComponent(JSON.stringify(closed));
+    await fetch(url, { method: 'GET', mode: 'no-cors' });
   } catch(e) { showStatus('Save failed', 'var(--red)'); }
 }
 
