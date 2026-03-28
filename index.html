@@ -561,7 +561,13 @@ function renderDeals() {
   const wrap = document.getElementById('deal-list-wrap');
   if (deals.length === 0) { wrap.style.display = 'none'; return; }
   wrap.style.display = 'block';
-  document.getElementById('deal-tbody').innerHTML = deals.map(d => `
+  const monthOrder = { 'April': 1, 'May': 2, 'June': 3 };
+  const sorted = [...deals].sort((a, b) => {
+    const am = monthOrder[a.close_month] || 99;
+    const bm = monthOrder[b.close_month] || 99;
+    return am - bm;
+  });
+  document.getElementById('deal-tbody').innerHTML = sorted.map(d => `
     <tr>
       <td style="font-weight:600">${d.name}</td>
       <td>${productBadge(d.product)}</td>
