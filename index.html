@@ -124,12 +124,34 @@ button.add-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--muted); border-top: 1px solid var(--border); margin-top: 2rem; }
 
 @media (max-width: 700px) {
-  main { padding: 1rem; }
-  header { padding: 1rem; }
-  .grid4, .q-inputs { grid-template-columns: repeat(2, minmax(0,1fr)); }
-  .cov-cards { grid-template-columns: repeat(2, minmax(0,1fr)); }
-  .deal-add { grid-template-columns: 1fr 1fr; }
+  main { padding: 0.85rem; }
+  header { padding: 0.85rem 1rem; gap: 8px; }
+  header h1 { font-size: 0.95rem; }
+  header > div:last-child { flex-wrap: wrap; gap: 8px; }
+  #lock-bar { flex-wrap: wrap; gap: 6px; }
+  #pw-input { width: 130px !important; }
+  .grid4 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .q-inputs { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .cov-cards { grid-template-columns: minmax(0,1fr); }
   .acc-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .sentinel { flex-direction: column; align-items: flex-start; gap: 8px; }
+  #deal-add-form { grid-template-columns: 1fr 1fr !important; }
+  .deal-table { font-size: 0.7rem; }
+  .deal-table th, .deal-table td { padding: 6px 6px; }
+  .panel { padding: 12px; }
+  .card { padding: 10px 12px; }
+  .card-val { font-size: 1.1rem; }
+  .section-label { font-size: 0.65rem; }
+  #pipeline-note { font-size: 0.72rem; }
+}
+
+@media (max-width: 420px) {
+  .grid4 { grid-template-columns: minmax(0,1fr); }
+  .q-inputs { grid-template-columns: minmax(0,1fr); }
+  #deal-add-form { grid-template-columns: 1fr !important; }
+  .acc-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .deal-table td:nth-child(4) { display: none; }
+  .deal-table th:nth-child(4) { display: none; }
 }
 </style>
 </head>
@@ -248,8 +270,8 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
       </div>
     </div>
 
-    <div id="deal-list-wrap" style="display:none;margin-bottom:1rem">
-      <table class="deal-table">
+    <div id="deal-list-wrap" style="display:none;margin-bottom:1rem;overflow-x:auto">
+      <table class="deal-table" style="min-width:550px">
         <thead><tr>
           <th>Deal</th><th>Product</th><th>MRR</th><th>ARR</th><th>Close month</th><th>Notes</th><th></th>
         </tr></thead>
