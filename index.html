@@ -207,7 +207,7 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
   <!-- 3. PIPELINE TRACKER ──────────────────────────────── -->
   <div class="section-label">Q2 pipeline tracker</div>
   <div style="margin-bottom:1.5rem">
-    <div class="deal-add">
+    <div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1.2fr) minmax(0,0.7fr) minmax(0,0.9fr) minmax(0,1.5fr) auto;gap:8px;margin-bottom:1rem;align-items:end">
       <div>
         <label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">Deal name</label>
         <input type="text" id="deal-name" placeholder="e.g. Foodliner" />
@@ -231,12 +231,17 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
         <input type="number" id="deal-mrr" placeholder="0" min="0" step="100" />
       </div>
       <div>
-        <label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">Sentiment</label>
-        <select id="deal-sentiment">
-          <option value="high">High — nearly done</option>
-          <option value="med" selected>Med — active</option>
-          <option value="low">Low — early stage</option>
+        <label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">Close month</label>
+        <select id="deal-month">
+          <option value="">— select —</option>
+          <option value="April">April</option>
+          <option value="May">May</option>
+          <option value="June">June</option>
         </select>
+      </div>
+      <div>
+        <label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">Notes</label>
+        <input type="text" id="deal-notes" placeholder="e.g. waiting on IT sign-off" />
       </div>
       <div style="padding-top:22px">
         <button class="add-btn" id="add-deal-btn" onclick="addDeal()">+ Add</button>
@@ -246,7 +251,7 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
     <div id="deal-list-wrap" style="display:none;margin-bottom:1rem">
       <table class="deal-table">
         <thead><tr>
-          <th>Deal</th><th>Product</th><th>MRR</th><th>ARR</th><th>Sentiment</th><th></th>
+          <th>Deal</th><th>Product</th><th>MRR</th><th>ARR</th><th>Close month</th><th>Notes</th><th></th>
         </tr></thead>
         <tbody id="deal-tbody"></tbody>
       </table>
@@ -278,21 +283,6 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
       <div class="sentinel-text" id="sentinel-text" style="color:var(--muted)">Add deals above to see pipeline health.</div>
       <span class="badge badge-muted" id="sentinel-badge">—</span>
     </div>
-  </div>
-
-  <!-- 4. 13% ACCELERATOR ───────────────────────────────── -->
-  <div class="section-label">13% accelerator tracker</div>
-  <div class="panel" style="margin-bottom:1.5rem">
-    <div class="acc-grid">
-      <div class="acc-item"><div class="al">Threshold (MRR)</div><div class="av">$37,282</div></div>
-      <div class="acc-item"><div class="al">Closed to date</div><div class="av" style="color:var(--green)" id="acc-closed">$11,417</div></div>
-      <div class="acc-item"><div class="al">Still needed</div><div class="av" style="color:var(--amber)" id="acc-need">$25,865</div></div>
-      <div class="acc-item"><div class="al">Status</div><div id="acc-status"><span class="badge badge-amber">not yet</span></div></div>
-    </div>
-    <div class="progress-track" style="height:12px;border-radius:6px">
-      <div class="progress-fill" id="acc-bar" style="background:var(--amber);height:12px;border-radius:6px;width:30.6%"></div>
-    </div>
-    <div style="font-size:0.7rem;color:var(--muted);margin-top:6px;font-weight:500" id="acc-label">30.6% toward 13% accelerator rate</div>
   </div>
 
   <!-- 5. Q1 LOCKED ────────────────────────────────────── -->
@@ -345,7 +335,22 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
     </div>
   </div>
 
-  <!-- 7. CLOSED MRR INPUTS ────────────────────────────── -->
+  <!-- 13% ACCELERATOR ───────────────────────────────── -->
+  <div class="section-label">13% accelerator tracker</div>
+  <div class="panel" style="margin-bottom:1.5rem">
+    <div class="acc-grid">
+      <div class="acc-item"><div class="al">Threshold (MRR)</div><div class="av">$37,282</div></div>
+      <div class="acc-item"><div class="al">Closed to date</div><div class="av" style="color:var(--green)" id="acc-closed">$11,417</div></div>
+      <div class="acc-item"><div class="al">Still needed</div><div class="av" style="color:var(--amber)" id="acc-need">$25,865</div></div>
+      <div class="acc-item"><div class="al">Status</div><div id="acc-status"><span class="badge badge-amber">not yet</span></div></div>
+    </div>
+    <div class="progress-track" style="height:12px;border-radius:6px">
+      <div class="progress-fill" id="acc-bar" style="background:var(--amber);height:12px;border-radius:6px;width:30.6%"></div>
+    </div>
+    <div style="font-size:0.7rem;color:var(--muted);margin-top:6px;font-weight:500" id="acc-label">30.6% toward 13% accelerator rate</div>
+  </div>
+
+  <!-- CLOSED MRR INPUTS ────────────────────────────── -->
   <div class="section-label">closed MRR by quarter</div>
   <div class="q-inputs" style="margin-bottom:0">
     <div class="q-input-item">
@@ -420,7 +425,7 @@ function setLock(locked) {
     if (locked) { el.setAttribute('readonly',''); el.style.opacity='0.55'; el.style.cursor='not-allowed'; }
     else { el.removeAttribute('readonly'); el.style.opacity='1'; el.style.cursor='auto'; }
   });
-  ['deal-name','deal-mrr','deal-product','deal-sentiment'].forEach(id => {
+  ['deal-name','deal-mrr','deal-product','deal-month','deal-notes'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
     el.disabled = locked; el.style.opacity = locked ? '0.5' : '1';
@@ -532,12 +537,15 @@ function addDeal() {
   const name = document.getElementById('deal-name').value.trim();
   const product = document.getElementById('deal-product').value;
   const mrr = parseFloat(document.getElementById('deal-mrr').value) || 0;
-  const sentiment = document.getElementById('deal-sentiment').value;
+  const close_month = document.getElementById('deal-month').value;
+  const notes = document.getElementById('deal-notes').value.trim();
   if (!name || mrr <= 0) return;
-  deals.push({ id: Date.now(), name, product, mrr, sentiment });
+  deals.push({ id: Date.now(), name, product, mrr, close_month, notes });
   saveDealsToSheets();
   document.getElementById('deal-name').value = '';
   document.getElementById('deal-mrr').value = '';
+  document.getElementById('deal-notes').value = '';
+  document.getElementById('deal-month').value = '';
   renderDeals();
   updatePipeline();
 }
@@ -559,10 +567,38 @@ function renderDeals() {
       <td>${productBadge(d.product)}</td>
       <td>${fmt(d.mrr)}</td>
       <td style="color:var(--muted)">${fmt(d.mrr * 12)}</td>
-      <td>${sentimentLabel(d.sentiment)}</td>
+      <td><select onchange="updateDealField(${d.id},'close_month',this.value)" style="font-size:0.72rem;padding:3px 6px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer" ${!isUnlocked ? 'disabled' : ''}>
+        <option value="" ${!d.close_month?'selected':''}>— select —</option>
+        <option value="April" ${d.close_month==='April'?'selected':''}>April</option>
+        <option value="May" ${d.close_month==='May'?'selected':''}>May</option>
+        <option value="June" ${d.close_month==='June'?'selected':''}>June</option>
+      </select></td>
+      <td style="max-width:200px;padding:4px 8px">
+        <input type="text" value="${(d.notes || '').replace(/"/g,'&quot;')}"
+          placeholder="add note..."
+          data-id="${d.id}"
+          onchange="updateNote(${d.id}, this.value)"
+          style="width:100%;font-size:0.72rem;background:transparent;border:none;border-bottom:1px dashed var(--border2);padding:2px 0;color:var(--muted);outline:none;font-family:var(--font-body)"
+          ${isUnlocked ? '' : 'readonly'}
+        />
+      </td>
       <td><button class="del-btn" onclick="removeDeal(${d.id})">✕</button></td>
     </tr>`).join('');
   if (!isUnlocked) setLock(true);
+}
+
+function updateNote(id, value) {
+  const deal = deals.find(d => d.id === id);
+  if (!deal) return;
+  deal.notes = value;
+  saveDealsToSheets();
+}
+
+function updateDealField(id, field, value) {
+  const deal = deals.find(d => d.id === id);
+  if (!deal) return;
+  deal[field] = value;
+  saveDealsToSheets();
 }
 
 function updatePipeline() {
