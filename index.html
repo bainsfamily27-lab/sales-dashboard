@@ -140,17 +140,14 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
     <h1>Sales Dashboard 2026 — Manny</h1>
   </div>
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <span id="save-status" style="font-size:0.72rem;color:var(--muted)"></span>
     <div id="lock-bar" style="display:flex;align-items:center;gap:8px">
       <input type="password" id="pw-input" placeholder="Password to edit" style="width:160px" />
       <button onclick="tryUnlock()" style="font-family:var(--font-body);font-size:0.75rem;font-weight:600;background:var(--accent-dim2);border:1px solid rgba(37,99,235,0.3);color:var(--accent);border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap">Unlock</button>
       <span id="lock-msg" style="font-size:0.7rem;color:var(--muted)">view only</span>
     </div>
-    <button onclick="exportSnapshot()" style="font-family:var(--font-body);font-size:0.75rem;font-weight:600;background:var(--green-dim);border:1px solid rgba(22,163,74,0.3);color:var(--green);border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap" title="Copy shareable link to clipboard">Share snapshot</button>
   </div>
 </header>
-
-<!-- share toast -->
-<div id="share-toast" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0a0b0d;color:#fff;font-size:0.78rem;font-weight:500;padding:10px 20px;border-radius:8px;z-index:999;white-space:nowrap">Link copied to clipboard!</div>
 
 <main>
 
@@ -538,7 +535,7 @@ function addDeal() {
   const sentiment = document.getElementById('deal-sentiment').value;
   if (!name || mrr <= 0) return;
   deals.push({ id: Date.now(), name, product, mrr, sentiment });
-  localStorage.setItem('sd_deals', JSON.stringify(deals));
+  saveDealsToSheets();
   document.getElementById('deal-name').value = '';
   document.getElementById('deal-mrr').value = '';
   renderDeals();
@@ -547,7 +544,7 @@ function addDeal() {
 
 function removeDeal(id) {
   deals = deals.filter(d => d.id !== id);
-  localStorage.setItem('sd_deals', JSON.stringify(deals));
+  saveDealsToSheets();
   renderDeals();
   updatePipeline();
 }
@@ -630,70 +627,62 @@ function updatePipeline() {
   sb.className = cls;
 }
 
-// ── SHARE SNAPSHOT ───────────────────────────────────────────────
-function exportSnapshot() {
-  const snapshot = {
-    closed: {
+// ── GOOGLE SHEETS API ────────────────────────────────────────────
+const API = 'https://script.google.com/macros/s/AKfycbw-EAT7uNadVD1TPjaIPJVTAproAHOI3_mON78nGGMEuxUI6ScmLjPteSmRqKmZfGrH5w/exec';
+
+function showStatus(msg, col) {
+  const el = document.getElementById('save-status');
+  if (!el) return;
+  el.textContent = msg; el.style.color = col || 'var(--muted)';
+  setTimeout(() => { el.textContent = ''; }, 3000);
+}
+
+async function loadFromSheets() {
+  try {
+    showStatus('Loading...', 'var(--muted)');
+    const [dealsRes, closedRes] = await Promise.all([
+      fetch(API + '?action=getDeals'),
+      fetch(API + '?action=getClosed')
+    ]);
+    const dealsData = await dealsRes.json();
+    const closedData = await closedRes.json();
+    if (dealsData.deals) deals = dealsData.deals;
+    if (closedData.closed) {
+      if (closedData.closed.q2) document.getElementById('q2-closed').value = closedData.closed.q2;
+      if (closedData.closed.q3) document.getElementById('q3-closed').value = closedData.closed.q3;
+      if (closedData.closed.q4) document.getElementById('q4-closed').value = closedData.closed.q4;
+    }
+    showStatus('', '');
+  } catch(e) { showStatus('Could not load data', 'var(--red)'); }
+  renderDeals();
+  update();
+}
+
+async function saveDealsToSheets() {
+  try {
+    showStatus('Saving...', 'var(--amber)');
+    await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'saveDeals', deals }) });
+    showStatus('Saved', 'var(--green)');
+  } catch(e) { showStatus('Save failed', 'var(--red)'); }
+}
+
+async function saveClosedToSheets() {
+  try {
+    await fetch(API, { method: 'POST', body: JSON.stringify({ action: 'saveClosed', closed: {
       q2: parseFloat(document.getElementById('q2-closed').value) || 0,
       q3: parseFloat(document.getElementById('q3-closed').value) || 0,
       q4: parseFloat(document.getElementById('q4-closed').value) || 0
-    },
-    deals: deals
-  };
-  const encoded = btoa(encodeURIComponent(JSON.stringify(snapshot)));
-  const url = window.location.origin + window.location.pathname + '#data=' + encoded;
-  navigator.clipboard.writeText(url).then(() => {
-    const t = document.getElementById('share-toast');
-    t.style.display = 'block';
-    setTimeout(() => { t.style.display = 'none'; }, 2500);
-  }).catch(() => {
-    prompt('Copy this link:', url);
-  });
-}
-
-function loadFromHash() {
-  try {
-    const hash = window.location.hash;
-    if (!hash.startsWith('#data=')) return false;
-    const decoded = JSON.parse(decodeURIComponent(atob(hash.replace('#data=', ''))));
-    if (decoded.closed) {
-      if (decoded.closed.q2) document.getElementById('q2-closed').value = decoded.closed.q2;
-      if (decoded.closed.q3) document.getElementById('q3-closed').value = decoded.closed.q3;
-      if (decoded.closed.q4) document.getElementById('q4-closed').value = decoded.closed.q4;
-    }
-    if (decoded.deals) deals = decoded.deals;
-    return true;
-  } catch(e) { return false; }
+    }})});
+  } catch(e) { showStatus('Save failed', 'var(--red)'); }
 }
 
 // ── INIT ─────────────────────────────────────────────────────────
-// Try loading from shared URL first, then fall back to localStorage
-const loadedFromHash = loadFromHash();
-if (!loadedFromHash) {
-  try { deals = JSON.parse(localStorage.getItem('sd_deals') || '[]'); } catch(e) { deals = []; }
-  try {
-    const saved = JSON.parse(localStorage.getItem('sd_closed') || '{}');
-    if (saved.q2) document.getElementById('q2-closed').value = saved.q2;
-    if (saved.q3) document.getElementById('q3-closed').value = saved.q3;
-    if (saved.q4) document.getElementById('q4-closed').value = saved.q4;
-  } catch(e) {}
-}
-
 setLock(true);
-renderDeals();
-update();
+loadFromSheets();
 
-function saveClosedMRR() {
-  localStorage.setItem('sd_closed', JSON.stringify({
-    q2: document.getElementById('q2-closed').value,
-    q3: document.getElementById('q3-closed').value,
-    q4: document.getElementById('q4-closed').value
-  }));
-}
-
-document.getElementById('q2-closed').addEventListener('input', () => { saveClosedMRR(); update(); });
-document.getElementById('q3-closed').addEventListener('input', () => { saveClosedMRR(); update(); });
-document.getElementById('q4-closed').addEventListener('input', () => { saveClosedMRR(); update(); });
+document.getElementById('q2-closed').addEventListener('input', () => { saveClosedToSheets(); update(); });
+document.getElementById('q3-closed').addEventListener('input', () => { saveClosedToSheets(); update(); });
+document.getElementById('q4-closed').addEventListener('input', () => { saveClosedToSheets(); update(); });
 </script>
 </body>
 </html>
