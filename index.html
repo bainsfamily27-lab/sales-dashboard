@@ -137,8 +137,7 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
 
 <header>
   <div>
-    <h1>Sales Performance Dashboard</h1>
-    <div class="sub">Manny · 2026</div>
+    <h1>Sales Dashboard 2026 — Manny</h1>
   </div>
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <div id="lock-bar" style="display:flex;align-items:center;gap:8px">
@@ -147,7 +146,6 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
       <span id="lock-msg" style="font-size:0.7rem;color:var(--muted)">view only</span>
     </div>
     <button onclick="exportSnapshot()" style="font-family:var(--font-body);font-size:0.75rem;font-weight:600;background:var(--green-dim);border:1px solid rgba(22,163,74,0.3);color:var(--green);border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap" title="Copy shareable link to clipboard">Share snapshot</button>
-    <div class="year-badge">2026</div>
   </div>
 </header>
 
@@ -157,7 +155,10 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
 <main>
 
   <!-- 1. Q2 LIVE ───────────────────────────────────────── -->
-  <div class="section-label">Q2 — live (Apr–Jun 2026)</div>
+  <div class="section-label">Q2 — live (Apr–Jun)</div>
+  <div id="pipeline-note" style="display:none;background:var(--accent-dim);border:1px solid rgba(37,99,235,0.2);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:0.78rem;color:var(--text);line-height:1.6">
+    <span id="pipeline-note-text"></span>
+  </div>
   <div class="grid4">
     <div class="card active">
       <div class="card-label">Closed so far (MRR)</div>
@@ -182,7 +183,7 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
   </div>
 
   <!-- 2. ANNUAL SUMMARY ───────────────────────────────── -->
-  <div class="section-label">annual — 2026</div>
+  <div class="section-label">annual</div>
   <div class="grid4">
     <div class="card" style="border-left:3px solid var(--accent);border-radius:0 10px 10px 0">
       <div class="card-label">Closed to date (MRR)</div>
@@ -257,19 +258,19 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
     <div class="section-label" style="margin-top:0.25rem">pipeline coverage vs Q2 target ($11,191)</div>
     <div class="cov-cards">
       <div class="cov-card" id="cov-best-card">
-        <div class="cov-label">Best case — all deals</div>
+        <div class="cov-label">Best case — 100% close rate</div>
         <div class="cov-val" id="cov-best-val" style="color:var(--muted)">$0</div>
         <div class="cov-sub" id="cov-best-sub" style="color:var(--muted)">0x coverage</div>
         <div class="cov-bar-track"><div class="cov-bar-fill" id="cov-best-bar" style="width:0%;background:var(--muted)"></div></div>
       </div>
       <div class="cov-card" id="cov-likely-card">
-        <div class="cov-label">Likely — High + Med</div>
+        <div class="cov-label">Likely — 70% close rate</div>
         <div class="cov-val" id="cov-likely-val" style="color:var(--muted)">$0</div>
         <div class="cov-sub" id="cov-likely-sub" style="color:var(--muted)">0x coverage</div>
         <div class="cov-bar-track"><div class="cov-bar-fill" id="cov-likely-bar" style="width:0%;background:var(--muted)"></div></div>
       </div>
       <div class="cov-card" id="cov-cons-card">
-        <div class="cov-label">Conservative — High only</div>
+        <div class="cov-label">Worst case — 50% close rate</div>
         <div class="cov-val" id="cov-cons-val" style="color:var(--muted)">$0</div>
         <div class="cov-sub" id="cov-cons-sub" style="color:var(--muted)">0x coverage</div>
         <div class="cov-bar-track"><div class="cov-bar-fill" id="cov-cons-bar" style="width:0%;background:var(--muted)"></div></div>
@@ -370,7 +371,7 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
 
 </main>
 
-<footer>Sales Performance Dashboard · Manny · 2026</footer>
+<footer>Sales Dashboard 2026 — Manny</footer>
 
 <script>
 // ── CONFIG (edit these numbers to update dashboard) ──────────────
@@ -570,9 +571,22 @@ function renderDeals() {
 function updatePipeline() {
   const q2c = parseFloat(document.getElementById('q2-closed').value) || 0;
   const target = QUOTA.q2;
-  const best   = deals.reduce((s,d) => s+d.mrr, 0);
-  const likely = deals.filter(d => d.sentiment !== 'low').reduce((s,d) => s+d.mrr, 0);
-  const cons   = deals.filter(d => d.sentiment === 'high').reduce((s,d) => s+d.mrr, 0);
+  const total  = deals.reduce((s,d) => s+d.mrr, 0);
+  const best   = total;                        // 100%
+  const likely = Math.round(total * 0.70);     // 70%
+  const cons   = Math.round(total * 0.50);     // 50%
+
+  // Pipeline note above Q2 cards
+  const noteEl = document.getElementById('pipeline-note');
+  const noteText = document.getElementById('pipeline-note-text');
+  if (deals.length > 0) {
+    noteEl.style.display = 'block';
+    const likelyRatio = target > 0 ? (likely / target).toFixed(1) : '—';
+    const bestRatio = target > 0 ? (best / target).toFixed(1) : '—';
+    noteText.innerHTML = `<strong>Current Q2 pipeline: ${fmt(total)} MRR</strong> &nbsp;·&nbsp; Best case (100%): ${fmt(best)} &nbsp;·&nbsp; Likely (70%): ${fmt(likely)} — <strong>${likelyRatio}x coverage</strong> of $11,191 target`;
+  } else {
+    noteEl.style.display = 'none';
+  }
 
   function setCov(prefix, val) {
     const ratio = target > 0 ? val / target : 0;
@@ -605,12 +619,12 @@ function updatePipeline() {
   const lr = target > 0 ? likely / target : 2;
   const cr = target > 0 ? cons / target : 2;
   let msg, cls, bg, bc;
-  if (needed === 0)           { msg='Q2 quota already closed — pipeline is pure upside.'; cls='badge badge-green'; bg='rgba(22,163,74,0.07)'; bc='rgba(22,163,74,0.3)'; sb.textContent='quota hit'; }
-  else if (lr >= 2)           { msg='Strong — High + Med deals alone cover 2x the Q2 target. You\'re in great shape.'; cls='badge badge-green'; bg='rgba(22,163,74,0.07)'; bc='rgba(22,163,74,0.3)'; sb.textContent='healthy'; }
-  else if (lr >= 1 && cr >= 1){ msg='Manageable — enough High deals to cover Q2. Keep pushing to close them.'; cls='badge badge-amber'; bg='rgba(217,119,6,0.07)'; bc='rgba(217,119,6,0.3)'; sb.textContent='watch it'; }
-  else if (lr >= 1)           { msg='Risky — you need most Med deals to close to hit Q2. Work on converting to High.'; cls='badge badge-amber'; bg='rgba(217,119,6,0.07)'; bc='rgba(217,119,6,0.3)'; sb.textContent='risky'; }
-  else if (best >= target)    { msg='Danger — High + Med pipeline doesn\'t cover Q2. Build more pipeline now.'; cls='badge badge-red'; bg='rgba(220,38,38,0.07)'; bc='rgba(220,38,38,0.3)'; sb.textContent='danger'; }
-  else                        { msg='Critical — full pipeline doesn\'t cover Q2. You need '+fmt(target-best)+' more MRR.'; cls='badge badge-red'; bg='rgba(220,38,38,0.07)'; bc='rgba(220,38,38,0.3)'; sb.textContent='critical'; }
+  if (needed === 0)      { msg='Q2 quota already closed — pipeline is pure upside.'; cls='badge badge-green'; bg='rgba(22,163,74,0.07)'; bc='rgba(22,163,74,0.3)'; sb.textContent='quota hit'; }
+  else if (lr >= 2)      { msg='Strong — even at a 70% close rate you cover 2x the Q2 target. You\'re in great shape.'; cls='badge badge-green'; bg='rgba(22,163,74,0.07)'; bc='rgba(22,163,74,0.3)'; sb.textContent='healthy'; }
+  else if (lr >= 1)      { msg='Manageable — a 70% close rate covers Q2. Keep the pipeline moving.'; cls='badge badge-amber'; bg='rgba(217,119,6,0.07)'; bc='rgba(217,119,6,0.3)'; sb.textContent='watch it'; }
+  else if (cr >= 1)      { msg='Risky — you need better than a 50% close rate to hit Q2. Push to add more pipeline.'; cls='badge badge-amber'; bg='rgba(217,119,6,0.07)'; bc='rgba(217,119,6,0.3)'; sb.textContent='risky'; }
+  else if (best >= needed){ msg='Danger — even closing 100% of pipeline doesn\'t cover Q2. Build more pipeline now.'; cls='badge badge-red'; bg='rgba(220,38,38,0.07)'; bc='rgba(220,38,38,0.3)'; sb.textContent='danger'; }
+  else                   { msg='Critical — full pipeline doesn\'t cover Q2. You need '+fmt(target-best)+' more MRR.'; cls='badge badge-red'; bg='rgba(220,38,38,0.07)'; bc='rgba(220,38,38,0.3)'; sb.textContent='critical'; }
   s.style.background = bg; s.style.borderColor = bc;
   st.style.color = 'var(--text)'; st.textContent = msg;
   sb.className = cls;
