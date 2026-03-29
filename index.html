@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Sales Performance Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 :root {
   --bg: #f5f6f7;
@@ -143,6 +142,8 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
   .card-val { font-size: 1.1rem; }
   .section-label { font-size: 0.65rem; }
   #pipeline-note { font-size: 0.72rem; }
+  #q2-live-grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+  #proj-grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
 }
 
 @media (max-width: 420px) {
@@ -150,6 +151,7 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
   .q-inputs { grid-template-columns: minmax(0,1fr); }
   #deal-add-form { grid-template-columns: 1fr !important; }
   .acc-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  #q2-live-grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
   .deal-table td:nth-child(4) { display: none; }
   .deal-table th:nth-child(4) { display: none; }
 }
@@ -178,7 +180,7 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
   <div id="pipeline-note" style="display:none;background:var(--accent-dim);border:1px solid rgba(37,99,235,0.2);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:0.78rem;color:var(--text);line-height:1.6">
     <span id="pipeline-note-text"></span>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:1.5rem">
+  <div id="q2-live-grid" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:1.5rem">
     <div class="card active">
       <div class="card-label">Closed so far (MRR)</div>
       <div class="card-val" id="q2-mrr-disp">$0</div>
@@ -398,31 +400,18 @@ footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--m
   </div>
 
   <!-- PROJECTED FULL YEAR EARNINGS ───────────────────── -->
-  <div class="section-label">projected full year earnings</div>
+  <div class="section-label" style="margin-top:1.5rem">projected full year earnings</div>
   <div class="panel" style="margin-bottom:0">
-    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px">
-      <div style="background:var(--green-dim);border-radius:10px;padding:12px">
-        <div style="font-size:0.65rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px">At current pace</div>
-        <div style="font-size:1.3rem;font-weight:700;font-family:var(--font-head);color:var(--green)" id="proj-pace">—</div>
-        <div style="font-size:0.68rem;color:var(--muted);margin-top:3px" id="proj-pace-mrr">—</div>
+    <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+      <div style="background:var(--green-dim);border-radius:12px;padding:16px 24px;text-align:center;min-width:180px">
+        <div style="font-size:0.65rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px">Projected variable comp</div>
+        <div style="font-size:2rem;font-weight:800;font-family:var(--font-head);color:var(--green)" id="proj-pace">—</div>
+        <div style="font-size:0.68rem;color:var(--muted);margin-top:4px" id="proj-attainment-pct">based on current pace</div>
       </div>
-      <div style="background:var(--accent-dim);border-radius:10px;padding:12px">
-        <div style="font-size:0.65rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px">If you hit quota</div>
-        <div style="font-size:1.3rem;font-weight:700;font-family:var(--font-head);color:var(--accent)" id="proj-quota">—</div>
-        <div style="font-size:0.68rem;color:var(--muted);margin-top:3px">Base + comm + bonuses</div>
-      </div>
-      <div style="background:var(--amber-dim);border-radius:10px;padding:12px">
-        <div style="font-size:0.65rem;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px">If you hit 120%</div>
-        <div style="font-size:1.3rem;font-weight:700;font-family:var(--font-head);color:var(--amber)" id="proj-120">—</div>
-        <div style="font-size:0.68rem;color:var(--muted);margin-top:3px">Club rate kicks in hard</div>
-      </div>
-      <div style="background:rgba(220,38,38,0.06);border-radius:10px;padding:12px">
-        <div style="font-size:0.65rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px">Next deal above quota</div>
-        <div style="font-size:1.3rem;font-weight:700;font-family:var(--font-head);color:var(--red)" id="proj-next-deal">—</div>
-        <div style="font-size:0.68rem;color:var(--muted);margin-top:3px">per $1k MRR above quota</div>
+      <div style="flex:1;min-width:220px">
+        <div style="font-size:0.72rem;color:var(--muted);line-height:1.8" id="proj-note">—</div>
       </div>
     </div>
-    <div style="font-size:0.72rem;color:var(--muted);padding:10px 12px;background:var(--surface2);border-radius:8px" id="proj-note">—</div>
   </div>
 
 </main>
@@ -520,7 +509,7 @@ function calcBizDaysLeft() {
   document.getElementById('biz-days-left').closest('.card').style.borderLeftColor = urgency;
 }
 
-
+function update() {
   const q1c = 11417;
   const q2c = parseFloat(document.getElementById('q2-closed').value) || 0;
   const q3c = parseFloat(document.getElementById('q3-closed').value) || 0;
@@ -580,38 +569,51 @@ function calcBizDaysLeft() {
     annBonusBadge.className = 'badge badge-amber'; annBonusBadge.textContent = fmt(annNeed) + ' MRR away';
   }
 
-  // Projected full year earnings
+  // Projected full year earnings — based on current attainment pace
   const BASE = 135000;
-  const quartersElapsed = [q1c > 0, q2c > 0, q3c > 0, q4c > 0].filter(Boolean).length || 1;
-  const avgMRRperQ = total / quartersElapsed;
-  const projectedAnnualMRR = avgMRRperQ * 4;
-  const projComm = Math.round(calcComm(projectedAnnualMRR));
+  const quartersData = [
+    { closed: q1c, quota: QUOTA.q1 },
+    { closed: q2c, quota: QUOTA.q2 },
+    { closed: q3c, quota: QUOTA.q3 },
+    { closed: q4c, quota: QUOTA.q4 }
+  ];
+  // Calculate attainment % from quarters with actual data
+  const activeQs = quartersData.filter(q => q.closed > 0);
+  const attainmentPct = activeQs.length > 0
+    ? activeQs.reduce((s, q) => s + (q.closed / q.quota), 0) / activeQs.length
+    : (q1c / QUOTA.q1); // fallback to Q1 only
+
+  // Project remaining quarters using current attainment pace
+  const projMRRbyQ = quartersData.map(q => q.closed > 0 ? q.closed : q.quota * attainmentPct);
+  const projTotalMRR = projMRRbyQ.reduce((s, v) => s + v, 0);
+
+  // Commission on projected total
+  const projComm = Math.round(calcComm(projTotalMRR));
+
+  // Quarterly bonuses — only count if projected MRR >= that quarter's quota
   let projBonuses = 0;
-  if (q1c >= QUOTA.q1) projBonuses += BONUS.quarterly;
-  // Project remaining quarters hitting quota
-  const remainingQs = 4 - quartersElapsed;
-  projBonuses += remainingQs * BONUS.quarterly;
-  if (projectedAnnualMRR >= QUOTA.annual) projBonuses += BONUS.annual;
-  const projTotal = BASE + projComm + projBonuses;
+  quartersData.forEach((q, i) => {
+    const projQ = projMRRbyQ[i];
+    if (projQ >= q.quota) projBonuses += BONUS.quarterly;
+  });
+  // Annual bonus only if projected total >= annual quota
+  if (projTotalMRR >= QUOTA.annual) projBonuses += BONUS.annual;
 
-  const atQuotaComm = Math.round(calcComm(QUOTA.annual));
-  const atQuotaTotal = BASE + atQuotaComm + BONUS.quarterly * 4 + BONUS.annual;
-
-  const at120MRR = QUOTA.annual * 1.2;
-  const at120Comm = Math.round(calcComm(at120MRR));
-  const at120Total = BASE + at120Comm + BONUS.quarterly * 4 + BONUS.annual;
-
-  const nextDealVal = Math.round(calcComm(QUOTA.annual + 1000) - calcComm(QUOTA.annual));
+  const projTotal = projComm + projBonuses;
+  const attPctDisplay = Math.round(attainmentPct * 100);
 
   document.getElementById('proj-pace').textContent = fmt(projTotal);
-  document.getElementById('proj-pace-mrr').textContent = 'Based on ' + fmt(avgMRRperQ) + ' MRR/quarter pace';
-  document.getElementById('proj-quota').textContent = fmt(atQuotaTotal);
-  document.getElementById('proj-120').textContent = fmt(at120Total);
-  document.getElementById('proj-next-deal').textContent = fmt(nextDealVal * 12) + '/yr';
-  document.getElementById('proj-note').textContent =
-    'Base $135k + projected commission ' + fmt(projComm) + ' + bonuses ' + fmt(projBonuses) +
-    ' = ' + fmt(projTotal) + ' total. At 120% quota the 23% club rate adds ' +
-    fmt(at120Comm - atQuotaComm) + ' extra commission.';
+  document.getElementById('proj-attainment-pct').textContent =
+    'At ' + attPctDisplay + '% attainment pace · ' + activeQs.length + ' quarter' + (activeQs.length !== 1 ? 's' : '') + ' of data';
+
+  const projLines = [
+    '📊 Attainment pace: ' + attPctDisplay + '% (avg across ' + activeQs.length + ' quarter' + (activeQs.length !== 1 ? 's' : '') + ' with data)',
+    '📦 Projected annual MRR: ' + fmt(projTotalMRR) + ' → ' + fmt(projTotalMRR * 12) + ' ARR',
+    '💰 Projected commission: ' + fmt(projComm),
+    '🎯 Projected bonuses: ' + fmt(projBonuses) + ' (' + (projTotalMRR >= QUOTA.annual ? '$10k annual ✓' : '$10k annual ✗') + ' + quarterly where quota hit)',
+    '✅ Total projected variable comp: ' + fmt(projTotal)
+  ];
+  document.getElementById('proj-note').innerHTML = projLines.join('<br>');
 
   // Accelerator
   const accPct = Math.min(100, total / T75 * 100);
