@@ -701,30 +701,46 @@ function renderDeals() {
     const bm = monthOrder[b.close_month] || 99;
     return am - bm;
   });
+  const locked = !isUnlocked;
   document.getElementById('deal-tbody').innerHTML = sorted.map(d => `
     <tr>
       <td style="font-weight:600">${d.name}</td>
-      <td>${productBadge(d.product)}</td>
-      <td>${fmt(d.mrr)}</td>
-      <td style="color:var(--muted)">${fmt(d.mrr * 12)}</td>
-      <td><select onchange="updateDealField(${d.id},'close_month',this.value)" style="font-size:0.72rem;padding:3px 6px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer" ${!isUnlocked ? 'disabled' : ''}>
-        <option value="" ${!d.close_month?'selected':''}>— select —</option>
-        <option value="April" ${d.close_month==='April'?'selected':''}>April</option>
-        <option value="May" ${d.close_month==='May'?'selected':''}>May</option>
-        <option value="June" ${d.close_month==='June'?'selected':''}>June</option>
-      </select></td>
+      <td>
+        <select onchange="updateDealField(${d.id},'product',this.value)"
+          style="font-size:0.72rem;padding:3px 6px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:${locked?'not-allowed':'pointer'};opacity:${locked?'0.6':'1'}"
+          ${locked ? 'disabled' : ''}>
+          ${['Synergize','Synergize with IDP','IDP Only','Broker WF AI - TL','Broker WF AI - LTL','Carrier WF AI','Mobile Only','Geotab Only','Mobile + Geotab']
+            .map(p => `<option value="${p}" ${d.product===p?'selected':''}>${p}</option>`).join('')}
+        </select>
+      </td>
+      <td>
+        <input type="number" value="${d.mrr}" min="0" step="100"
+          onchange="updateDealField(${d.id},'mrr',parseFloat(this.value)||0);renderDeals();updatePipeline();update();"
+          style="width:90px;font-size:0.75rem;padding:3px 6px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text);opacity:${locked?'0.6':'1'}"
+          ${locked ? 'readonly' : ''}
+        />
+      </td>
+      <td style="color:var(--muted);font-size:0.75rem">${fmt(d.mrr * 12)}</td>
+      <td>
+        <select onchange="updateDealField(${d.id},'close_month',this.value)"
+          style="font-size:0.72rem;padding:3px 6px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:${locked?'not-allowed':'pointer'};opacity:${locked?'0.6':'1'}"
+          ${locked ? 'disabled' : ''}>
+          <option value="" ${!d.close_month?'selected':''}>— select —</option>
+          <option value="April"  ${d.close_month==='April'?'selected':''}>April</option>
+          <option value="May"    ${d.close_month==='May'?'selected':''}>May</option>
+          <option value="June"   ${d.close_month==='June'?'selected':''}>June</option>
+        </select>
+      </td>
       <td style="max-width:200px;padding:4px 8px">
         <input type="text" value="${(d.notes || '').replace(/"/g,'&quot;')}"
           placeholder="add note..."
-          data-id="${d.id}"
-          onchange="updateNote(${d.id}, this.value)"
-          style="width:100%;font-size:0.72rem;background:transparent;border:none;border-bottom:1px dashed var(--border2);padding:2px 0;color:var(--muted);outline:none;font-family:var(--font-body)"
-          ${isUnlocked ? '' : 'readonly'}
+          oninput="updateNote(${d.id}, this.value)"
+          style="width:100%;font-size:0.72rem;background:transparent;border:none;border-bottom:1px dashed var(--border2);padding:2px 0;color:var(--muted);outline:none;font-family:var(--font-body);opacity:${locked?'0.5':'1'}"
+          ${locked ? 'readonly' : ''}
         />
       </td>
-      <td><button class="del-btn" onclick="removeDeal(${d.id})">✕</button></td>
+      <td><button class="del-btn" onclick="removeDeal(${d.id})" ${locked?'disabled':''}>✕</button></td>
     </tr>`).join('');
-  if (!isUnlocked) setLock(true);
 }
 function updateNote(id, value) {
   const deal = deals.find(d => d.id === id);
