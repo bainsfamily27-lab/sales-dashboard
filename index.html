@@ -7,96 +7,84 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
 :root {
-  --bg: #f5f6f7;
-  --surface: #ffffff;
-  --surface2: #f0f1f3;
-  --border: rgba(0,0,0,0.09);
-  --border2: rgba(0,0,0,0.18);
-  --text: #0a0b0d;
-  --muted: #4a4d55;
-  --accent: #2563eb;
-  --accent-dim: rgba(37,99,235,0.08);
-  --accent-dim2: rgba(37,99,235,0.15);
-  --blue: #2563eb;
-  --blue-dim: rgba(37,99,235,0.08);
-  --amber: #d97706;
-  --amber-dim: rgba(217,119,6,0.08);
-  --red: #dc2626;
-  --red-dim: rgba(220,38,38,0.08);
-  --green: #16a34a;
-  --green-dim: rgba(22,163,74,0.08);
-  --font-head: 'Plus Jakarta Sans', sans-serif;
-  --font-body: 'Inter', sans-serif;
+--bg: #f5f6f7;
+--surface: #ffffff;
+--surface2: #f0f1f3;
+--border: rgba(0,0,0,0.09);
+--border2: rgba(0,0,0,0.18);
+--text: #0a0b0d;
+--muted: #4a4d55;
+--accent: #2563eb;
+--accent-dim: rgba(37,99,235,0.08);
+--accent-dim2: rgba(37,99,235,0.15);
+--blue: #2563eb;
+--blue-dim: rgba(37,99,235,0.08);
+--amber: #d97706;
+--amber-dim: rgba(217,119,6,0.08);
+--red: #dc2626;
+--red-dim: rgba(220,38,38,0.08);
+--green: #16a34a;
+--green-dim: rgba(22,163,74,0.08);
+--font-head: 'Plus Jakarta Sans', sans-serif;
+--font-body: 'Inter', sans-serif;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; }
-
 header {
-  border-bottom: 1px solid var(--border);
-  padding: 1.25rem 2rem;
-  display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
-  background: var(--surface);
+border-bottom: 1px solid var(--border);
+padding: 1.25rem 2rem;
+display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+background: var(--surface);
 }
 header h1 { font-family: var(--font-head); font-weight: 700; font-size: 1.1rem; color: var(--accent); }
 header .sub { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
 .year-badge { font-size: 0.72rem; background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(37,99,235,0.2); padding: 4px 12px; border-radius: 20px; }
-
 main { padding: 1.75rem 2rem; max-width: 1200px; margin: 0 auto; }
-
 .section-label {
-  font-size: 0.72rem; font-weight: 600; color: var(--muted);
-  text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px;
-  display: flex; align-items: center; gap: 8px;
+font-size: 0.72rem; font-weight: 600; color: var(--muted);
+text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px;
+display: flex; align-items: center; gap: 8px;
 }
 .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
 .grid4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; margin-bottom: 1.5rem; }
 .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin-bottom: 1.5rem; }
 .q-inputs { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; margin-bottom: 1.5rem; }
-
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 13px 15px; }
 .card.done { border-left: 3px solid var(--green); border-radius: 0 10px 10px 0; }
 .card.active { border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0; }
 .card-label { font-size: 0.72rem; color: var(--muted); margin-bottom: 4px; }
 .card-val { font-size: 1.25rem; font-weight: 700; font-family: var(--font-head); color: var(--text); }
 .card-sub { font-size: 0.7rem; color: var(--muted); margin-top: 3px; }
-
 .badge { display: inline-block; font-size: 0.68rem; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
 .badge-green { background: rgba(22,163,74,0.1); color: #15803d; border: 1px solid rgba(22,163,74,0.25); }
 .badge-blue { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(37,99,235,0.2); }
 .badge-amber { background: var(--amber-dim); color: #b45309; border: 1px solid rgba(217,119,6,0.25); }
 .badge-red { background: var(--red-dim); color: #b91c1c; border: 1px solid rgba(220,38,38,0.25); }
 .badge-muted { background: rgba(0,0,0,0.05); color: var(--muted); border: 1px solid var(--border); }
-
 .progress-section { margin-bottom: 1.5rem; }
 .progress-row { display: flex; align-items: center; gap: 12px; margin-bottom: 9px; }
 .progress-label { font-size: 0.74rem; color: var(--muted); min-width: 90px; }
 .progress-track { flex: 1; height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; border: 1px solid var(--border); }
 .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
 .progress-val { font-size: 0.72rem; font-weight: 600; min-width: 52px; text-align: right; }
-
 .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
 .panel h3 { font-size: 0.68rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 12px; }
-
 .q-input-item label { display: block; font-size: 0.7rem; color: var(--muted); font-weight: 500; margin-bottom: 5px; }
 input[type="number"], input[type="text"], input[type="password"], select {
-  font-family: var(--font-body); font-size: 0.8rem; background: var(--surface2);
-  border: 1px solid var(--border); border-radius: 7px; color: var(--text);
-  padding: 8px 12px; width: 100%; outline: none; transition: border-color 0.2s;
+font-family: var(--font-body); font-size: 0.8rem; background: var(--surface2);
+border: 1px solid var(--border); border-radius: 7px; color: var(--text);
+padding: 8px 12px; width: 100%; outline: none; transition: border-color 0.2s;
 }
 input:focus, select:focus { border-color: rgba(37,99,235,0.4); background: var(--surface); }
 select option { background: var(--surface); }
-
 button.add-btn {
-  font-family: var(--font-body); font-size: 0.78rem; font-weight: 600;
-  background: var(--accent); border: none; color: #fff;
-  border-radius: 7px; padding: 9px 16px; cursor: pointer; white-space: nowrap; transition: all 0.2s;
+font-family: var(--font-body); font-size: 0.78rem; font-weight: 600;
+background: var(--accent); border: none; color: #fff;
+border-radius: 7px; padding: 9px 16px; cursor: pointer; white-space: nowrap; transition: all 0.2s;
 }
 button.add-btn:hover { background: #1d4ed8; }
 button.add-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-
 .deal-add { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1.3fr) minmax(0,0.7fr) minmax(0,1fr) auto; gap: 8px; margin-bottom: 1rem; align-items: end; }
-
 .deal-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
 .deal-table th { font-size: 0.65rem; font-weight: 600; color: var(--muted); text-align: left; padding: 0 10px 8px; border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.07em; }
 .deal-table td { font-size: 0.78rem; padding: 8px 10px; border-bottom: 1px solid var(--border); color: var(--text); }
@@ -104,7 +92,6 @@ button.add-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 .del-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.85rem; padding: 2px 8px; border-radius: 4px; transition: color 0.2s; }
 .del-btn:hover { color: var(--red); }
 .del-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
 .cov-cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin-bottom: 1rem; }
 .cov-card { border-radius: 10px; padding: 13px 15px; border: 1px solid var(--border); transition: all 0.3s; }
 .cov-label { font-size: 0.68rem; font-weight: 500; color: var(--muted); margin-bottom: 5px; }
@@ -112,320 +99,298 @@ button.add-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 .cov-sub { font-size: 0.7rem; font-weight: 500; }
 .cov-bar-track { height: 5px; background: rgba(0,0,0,0.07); border-radius: 3px; margin-top: 8px; overflow: hidden; }
 .cov-bar-fill { height: 5px; border-radius: 3px; transition: width 0.5s ease; }
-
 .sentinel { border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 1.5rem; border: 1px solid var(--border); transition: all 0.3s; }
 .sentinel-text { font-size: 0.8rem; line-height: 1.5; font-weight: 500; }
-
 .acc-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin-bottom: 12px; }
 .acc-item .al { font-size: 0.68rem; color: var(--muted); margin-bottom: 3px; font-weight: 500; }
 .acc-item .av { font-size: 1rem; font-weight: 700; font-family: var(--font-head); }
-
 footer { text-align: center; padding: 1.5rem; font-size: 0.68rem; color: var(--muted); border-top: 1px solid var(--border); margin-top: 2rem; }
-
 @media (max-width: 700px) {
-  main { padding: 0.85rem; }
-  header { padding: 0.85rem 1rem; gap: 8px; }
-  header h1 { font-size: 0.95rem; }
-  header > div:last-child { flex-wrap: wrap; gap: 8px; }
-  #lock-bar { flex-wrap: wrap; gap: 6px; }
-  #pw-input { width: 130px !important; }
-  .grid4 { grid-template-columns: repeat(2, minmax(0,1fr)); }
-  .q-inputs { grid-template-columns: repeat(2, minmax(0,1fr)); }
-  .cov-cards { grid-template-columns: minmax(0,1fr); }
-  .acc-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
-  .sentinel { flex-direction: column; align-items: flex-start; gap: 8px; }
-  #deal-add-form { grid-template-columns: 1fr 1fr !important; }
-  .deal-table { font-size: 0.7rem; }
-  .deal-table th, .deal-table td { padding: 6px 6px; }
-  .panel { padding: 12px; }
-  .card { padding: 10px 12px; }
-  .card-val { font-size: 1.1rem; }
-  .section-label { font-size: 0.65rem; }
-  #pipeline-note { font-size: 0.72rem; }
-  #q2-live-grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
-  #proj-grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+main { padding: 0.85rem; }
+header { padding: 0.85rem 1rem; gap: 8px; }
+header h1 { font-size: 0.95rem; }
+header > div:last-child { flex-wrap: wrap; gap: 8px; }
+#lock-bar { flex-wrap: wrap; gap: 6px; }
+#pw-input { width: 130px !important; }
+.grid4 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.q-inputs { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.cov-cards { grid-template-columns: minmax(0,1fr); }
+.acc-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.sentinel { flex-direction: column; align-items: flex-start; gap: 8px; }
+#deal-add-form { grid-template-columns: 1fr 1fr !important; }
+.deal-table { font-size: 0.7rem; }
+.deal-table th, .deal-table td { padding: 6px 6px; }
+.panel { padding: 12px; }
+.card { padding: 10px 12px; }
+.card-val { font-size: 1.1rem; }
+.section-label { font-size: 0.65rem; }
+#pipeline-note { font-size: 0.72rem; }
+#q2-live-grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+#proj-grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
 }
-
 @media (max-width: 420px) {
-  .grid4 { grid-template-columns: minmax(0,1fr); }
-  .q-inputs { grid-template-columns: minmax(0,1fr); }
-  #deal-add-form { grid-template-columns: 1fr !important; }
-  .acc-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
-  #q2-live-grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
-  .deal-table td:nth-child(4) { display: none; }
-  .deal-table th:nth-child(4) { display: none; }
+.grid4 { grid-template-columns: minmax(0,1fr); }
+.q-inputs { grid-template-columns: minmax(0,1fr); }
+#deal-add-form { grid-template-columns: 1fr !important; }
+.acc-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+#q2-live-grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+.deal-table td:nth-child(4) { display: none; }
+.deal-table th:nth-child(4) { display: none; }
 }
 </style>
 </head>
 <body>
-
 <header>
-  <div>
-    <h1>Sales Dashboard 2026 — Manny</h1>
-  </div>
-  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-    <span id="save-status" style="font-size:0.72rem;color:var(--muted)"></span>
-    <div id="lock-bar" style="display:flex;align-items:center;gap:8px">
-      <input type="password" id="pw-input" placeholder="Password to edit" style="width:160px" />
-      <button onclick="tryUnlock()" style="font-family:var(--font-body);font-size:0.75rem;font-weight:600;background:var(--accent-dim2);border:1px solid rgba(37,99,235,0.3);color:var(--accent);border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap">Unlock</button>
-      <span id="lock-msg" style="font-size:0.7rem;color:var(--muted)">view only</span>
-    </div>
-  </div>
+<div>
+<h1>Sales Dashboard 2026 — Manny</h1>
+</div>
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+<span id="save-status" style="font-size:0.72rem;color:var(--muted)"></span>
+<div id="lock-bar" style="display:flex;align-items:center;gap:8px">
+<input type="password" id="pw-input" placeholder="Password to edit" style="width:160px" />
+<button onclick="tryUnlock()" style="font-family:var(--font-body);font-size:0.75rem;font-weight:600;background:var(--accent-dim2);border:1px solid rgba(37,99,235,0.3);color:var(--accent);border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap">Unlock</button>
+<span id="lock-msg" style="font-size:0.7rem;color:var(--muted)">view only</span>
+</div>
+</div>
 </header>
-
 <main>
-
-  <!-- 1. Q2 LIVE ───────────────────────────────────────── -->
-  <div class="section-label">Q2 — live (Apr–Jun)</div>
-  <div id="pipeline-note" style="display:none;background:var(--accent-dim);border:1px solid rgba(37,99,235,0.2);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:0.78rem;color:var(--text);line-height:1.6">
-    <span id="pipeline-note-text"></span>
-  </div>
-  <div id="q2-live-grid" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:1.5rem">
-    <div class="card active">
-      <div class="card-label">Closed so far (MRR)</div>
-      <div class="card-val" id="q2-mrr-disp">$0</div>
-      <div class="card-sub" id="q2-arr-disp">$0 ARR</div>
-    </div>
-    <div class="card active">
-      <div class="card-label">Q2 target</div>
-      <div class="card-val">$11,191</div>
-      <div class="card-sub"><span class="badge badge-blue" id="q2-att-badge">0% there</span></div>
-    </div>
-    <div class="card active">
-      <div class="card-label">Commission so far</div>
-      <div class="card-val" id="q2-comm-disp">$0</div>
-      <div class="card-sub">ARR basis</div>
-    </div>
-    <div class="card active">
-      <div class="card-label">Still needed</div>
-      <div class="card-val" id="q2-need-disp">$11,191</div>
-      <div class="card-sub">to hit quota + $3k bonus</div>
-    </div>
-    <div class="card" style="border-left:3px solid var(--red);border-radius:0 10px 10px 0;text-align:center">
-      <div class="card-label">Business days left</div>
-      <div class="card-val" id="biz-days-left" style="color:var(--red)">—</div>
-      <div class="card-sub" id="biz-days-sub">in Q2</div>
-    </div>
-  </div>
-
-  <!-- 2. ANNUAL SUMMARY ───────────────────────────────── -->
-  <div class="section-label">annual</div>
-  <div class="grid4">
-    <div class="card" style="border-left:3px solid var(--accent);border-radius:0 10px 10px 0">
-      <div class="card-label">Closed to date (MRR)</div>
-      <div class="card-val" id="ann-closed">—</div>
-      <div class="card-sub" id="ann-closed-arr">— ARR</div>
-    </div>
-    <div class="card" style="border-left:3px solid var(--accent);border-radius:0 10px 10px 0">
-      <div class="card-label">Annual attainment</div>
-      <div class="card-val" id="ann-att">—</div>
-      <div class="card-sub"><span class="badge" id="ann-badge">—</span></div>
-    </div>
-    <div class="card" style="border-left:3px solid var(--amber);border-radius:0 10px 10px 0">
-      <div class="card-label">Still needed (MRR)</div>
-      <div class="card-val" id="ann-need">—</div>
-      <div class="card-sub">to hit $49,709 annual</div>
-    </div>
-    <div class="card" style="border-left:3px solid var(--amber);border-radius:0 10px 10px 0">
-      <div class="card-label">Annual bonus status</div>
-      <div class="card-val">$10,000</div>
-      <div class="card-sub"><span class="badge" id="ann-bonus-badge">—</span></div>
-    </div>
-  </div>
-
-  <div class="section-label">Q2 pipeline tracker</div>
-  <div style="margin-bottom:1.5rem">
-    <div id="deal-add-form" style="display:none;grid-template-columns:minmax(0,1.4fr) minmax(0,1.2fr) minmax(0,0.7fr) minmax(0,0.9fr) minmax(0,1.5fr) auto;gap:8px;margin-bottom:1rem;align-items:end">
-      <div>
-        <label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">Deal name</label>
-        <input type="text" id="deal-name" placeholder="e.g. Foodliner" />
-      </div>
-      <div>
-        <label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">Product</label>
-        <select id="deal-product">
-          <option value="Synergize">Synergize</option>
-          <option value="Synergize with IDP">Synergize with IDP</option>
-          <option value="IDP Only">IDP Only</option>
-          <option value="Broker WF AI - TL">Broker WF AI - TL</option>
-          <option value="Broker WF AI - LTL">Broker WF AI - LTL</option>
-          <option value="Carrier WF AI">Carrier WF AI</option>
-          <option value="Mobile Only">Mobile Only</option>
-          <option value="Geotab Only">Geotab Only</option>
-          <option value="Mobile + Geotab">Mobile + Geotab</option>
-        </select>
-      </div>
-      <div>
-        <label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">MRR $</label>
-        <input type="number" id="deal-mrr" placeholder="0" min="0" step="100" />
-      </div>
-      <div>
-        <label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">Close month</label>
-        <select id="deal-month">
-          <option value="">— select —</option>
-          <option value="April">April</option>
-          <option value="May">May</option>
-          <option value="June">June</option>
-        </select>
-      </div>
-      <div>
-        <label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">Notes</label>
-        <input type="text" id="deal-notes" placeholder="e.g. waiting on IT sign-off" />
-      </div>
-      <div style="padding-top:22px">
-        <button class="add-btn" id="add-deal-btn" onclick="addDeal()">+ Add</button>
-      </div>
-    </div>
-
-    <div id="deal-list-wrap" style="display:none;margin-bottom:1rem;overflow-x:auto">
-      <table class="deal-table" style="min-width:550px">
-        <thead><tr>
-          <th>Deal</th><th>Product</th><th>MRR</th><th>ARR</th><th>Close month</th><th>Notes</th><th></th>
-        </tr></thead>
-        <tbody id="deal-tbody"></tbody>
-      </table>
-    </div>
-
-    <div class="section-label" style="margin-top:0.25rem">pipeline coverage vs Q2 target ($11,191)</div>
-    <div class="cov-cards">
-      <div class="cov-card" id="cov-best-card">
-        <div class="cov-label">Best case — 100% close rate</div>
-        <div class="cov-val" id="cov-best-val" style="color:var(--muted)">$0</div>
-        <div class="cov-sub" id="cov-best-sub" style="color:var(--muted)">0x coverage</div>
-        <div class="cov-bar-track"><div class="cov-bar-fill" id="cov-best-bar" style="width:0%;background:var(--muted)"></div></div>
-      </div>
-      <div class="cov-card" id="cov-likely-card">
-        <div class="cov-label">Likely — 70% close rate</div>
-        <div class="cov-val" id="cov-likely-val" style="color:var(--muted)">$0</div>
-        <div class="cov-sub" id="cov-likely-sub" style="color:var(--muted)">0x coverage</div>
-        <div class="cov-bar-track"><div class="cov-bar-fill" id="cov-likely-bar" style="width:0%;background:var(--muted)"></div></div>
-      </div>
-      <div class="cov-card" id="cov-cons-card">
-        <div class="cov-label">Worst case — 50% close rate</div>
-        <div class="cov-val" id="cov-cons-val" style="color:var(--muted)">$0</div>
-        <div class="cov-sub" id="cov-cons-sub" style="color:var(--muted)">0x coverage</div>
-        <div class="cov-bar-track"><div class="cov-bar-fill" id="cov-cons-bar" style="width:0%;background:var(--muted)"></div></div>
-      </div>
-    </div>
-
-    <div class="sentinel" id="sentinel" style="background:var(--surface2)">
-      <div class="sentinel-text" id="sentinel-text" style="color:var(--muted)">Add deals above to see pipeline health.</div>
-      <span class="badge badge-muted" id="sentinel-badge">—</span>
-    </div>
-  </div>
-
-  <!-- 5. Q1 LOCKED ────────────────────────────────────── -->
-  <div class="section-label">Q1 — locked</div>
-  <div class="grid4">
-    <div class="card done">
-      <div class="card-label">Closed MRR</div>
-      <div class="card-val" id="q1-mrr-disp">—</div>
-      <div class="card-sub" id="q1-arr-disp">—</div>
-    </div>
-    <div class="card done">
-      <div class="card-label">Attainment</div>
-      <div class="card-val" id="q1-att">—</div>
-      <div class="card-sub"><span class="badge" id="q1-badge">—</span></div>
-    </div>
-    <div class="card done">
-      <div class="card-label">Commission earned</div>
-      <div class="card-val" id="q1-comm">—</div>
-      <div class="card-sub">ARR × 9%</div>
-    </div>
-    <div class="card done">
-      <div class="card-label">Q1 bonus</div>
-      <div class="card-val">$3,000</div>
-      <div class="card-sub"><span class="badge badge-green">locked</span></div>
-    </div>
-  </div>
-
-  <!-- 6. Q3 & Q4 ───────────────────────────────────────── -->
-  <div class="section-label">Q3 &amp; Q4 — tracking</div>
-  <div class="grid4">
-    <div class="card">
-      <div class="card-label">Q3 closed (MRR)</div>
-      <div class="card-val" id="q3-mrr-disp">$0</div>
-      <div class="card-sub" id="q3-sub">—</div>
-    </div>
-    <div class="card">
-      <div class="card-label">Q3 target</div>
-      <div class="card-val">$14,391</div>
-      <div class="card-sub"><span class="badge badge-muted" id="q3-badge">upcoming</span></div>
-    </div>
-    <div class="card">
-      <div class="card-label">Q4 closed (MRR)</div>
-      <div class="card-val" id="q4-mrr-disp">$0</div>
-      <div class="card-sub" id="q4-sub">—</div>
-    </div>
-    <div class="card">
-      <div class="card-label">Q4 target</div>
-      <div class="card-val">$15,423</div>
-      <div class="card-sub"><span class="badge badge-muted" id="q4-badge">upcoming</span></div>
-    </div>
-  </div>
-
-  <!-- 13% ACCELERATOR ───────────────────────────────── -->
-  <div class="section-label">13% accelerator tracker</div>
-  <div class="panel" style="margin-bottom:1.5rem">
-    <div class="acc-grid">
-      <div class="acc-item"><div class="al">Threshold (MRR)</div><div class="av">$37,282</div></div>
-      <div class="acc-item"><div class="al">Closed to date</div><div class="av" style="color:var(--green)" id="acc-closed">$11,417</div></div>
-      <div class="acc-item"><div class="al">Still needed</div><div class="av" style="color:var(--amber)" id="acc-need">$25,865</div></div>
-      <div class="acc-item"><div class="al">Status</div><div id="acc-status"><span class="badge badge-amber">not yet</span></div></div>
-    </div>
-    <div class="progress-track" style="height:12px;border-radius:6px">
-      <div class="progress-fill" id="acc-bar" style="background:var(--amber);height:12px;border-radius:6px;width:30.6%"></div>
-    </div>
-    <div style="font-size:0.7rem;color:var(--muted);margin-top:6px;font-weight:500" id="acc-label">30.6% toward 13% accelerator rate</div>
-  </div>
-
-  <!-- CLOSED MRR INPUTS ────────────────────────────── -->
-  <div class="section-label">closed MRR by quarter</div>
-  <div class="q-inputs" style="margin-bottom:0">
-    <div class="q-input-item">
-      <label>Q1 (Jan–Mar) — locked</label>
-      <input type="number" id="q1-closed" value="11417" readonly style="opacity:0.55;cursor:not-allowed" />
-    </div>
-    <div class="q-input-item">
-      <label>Q2 (Apr–Jun)</label>
-      <input type="number" id="q2-closed" value="0" min="0" step="100" placeholder="0" />
-    </div>
-    <div class="q-input-item">
-      <label>Q3 (Jul–Sep)</label>
-      <input type="number" id="q3-closed" value="0" min="0" step="100" placeholder="0" />
-    </div>
-    <div class="q-input-item">
-      <label>Q4 (Oct–Dec)</label>
-      <input type="number" id="q4-closed" value="0" min="0" step="100" placeholder="0" />
-    </div>
-  </div>
-
-  <!-- PROJECTED FULL YEAR EARNINGS ───────────────────── -->
-  <div class="section-label" style="margin-top:1.5rem">projected full year earnings</div>
-  <div class="panel" style="margin-bottom:0">
-    <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
-      <div style="background:var(--green-dim);border-radius:12px;padding:16px 24px;text-align:center;min-width:180px">
-        <div style="font-size:0.65rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px">Projected variable comp</div>
-        <div style="font-size:2rem;font-weight:800;font-family:var(--font-head);color:var(--green)" id="proj-pace">—</div>
-        <div style="font-size:0.68rem;color:var(--muted);margin-top:4px" id="proj-attainment-pct">based on current pace</div>
-      </div>
-      <div style="flex:1;min-width:220px">
-        <div style="font-size:0.72rem;color:var(--muted);line-height:1.8" id="proj-note">—</div>
-      </div>
-    </div>
-  </div>
-
+<!-- 1. Q2 LIVE ───────────────────────────────────────── -->
+<div class="section-label">Q2 — live (Apr–Jun)</div>
+<div id="pipeline-note" style="display:none;background:var(--accent-dim);border:1px solid rgba(37,99,235,0.2);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:0.78rem;color:var(--text);line-height:1.6">
+<span id="pipeline-note-text"></span>
+</div>
+<div id="q2-live-grid" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:1.5rem">
+<div class="card active">
+<div class="card-label">Closed so far (MRR)</div>
+<div class="card-val" id="q2-mrr-disp">$0</div>
+<div class="card-sub" id="q2-arr-disp">$0 ARR</div>
+</div>
+<div class="card active">
+<div class="card-label">Q2 target</div>
+<div class="card-val">$11,191</div>
+<div class="card-sub"><span class="badge badge-blue" id="q2-att-badge">0% there</span></div>
+</div>
+<div class="card active">
+<div class="card-label">Commission so far</div>
+<div class="card-val" id="q2-comm-disp">$0</div>
+<div class="card-sub">ARR basis</div>
+</div>
+<div class="card active">
+<div class="card-label">Still needed</div>
+<div class="card-val" id="q2-need-disp">$11,191</div>
+<div class="card-sub">to hit quota + $3k bonus</div>
+</div>
+<div class="card" style="border-left:3px solid var(--red);border-radius:0 10px 10px 0;text-align:center">
+<div class="card-label">Business days left</div>
+<div class="card-val" id="biz-days-left" style="color:var(--red)">—</div>
+<div class="card-sub" id="biz-days-sub">in Q2</div>
+</div>
+</div>
+<!-- 2. ANNUAL SUMMARY ───────────────────────────────── -->
+<div class="section-label">annual</div>
+<div class="grid4">
+<div class="card" style="border-left:3px solid var(--accent);border-radius:0 10px 10px 0">
+<div class="card-label">Closed to date (MRR)</div>
+<div class="card-val" id="ann-closed">—</div>
+<div class="card-sub" id="ann-closed-arr">— ARR</div>
+</div>
+<div class="card" style="border-left:3px solid var(--accent);border-radius:0 10px 10px 0">
+<div class="card-label">Annual attainment</div>
+<div class="card-val" id="ann-att">—</div>
+<div class="card-sub"><span class="badge" id="ann-badge">—</span></div>
+</div>
+<div class="card" style="border-left:3px solid var(--amber);border-radius:0 10px 10px 0">
+<div class="card-label">Still needed (MRR)</div>
+<div class="card-val" id="ann-need">—</div>
+<div class="card-sub">to hit $49,709 annual</div>
+</div>
+<div class="card" style="border-left:3px solid var(--amber);border-radius:0 10px 10px 0">
+<div class="card-label">Annual bonus status</div>
+<div class="card-val">$10,000</div>
+<div class="card-sub"><span class="badge" id="ann-bonus-badge">—</span></div>
+</div>
+</div>
+<div class="section-label">Q2 pipeline tracker</div>
+<div style="margin-bottom:1.5rem">
+<div id="deal-add-form" style="display:none;grid-template-columns:minmax(0,1.4fr) minmax(0,1.2fr) minmax(0,0.7fr) minmax(0,0.9fr) minmax(0,1.5fr) auto;gap:8px;margin-bottom:1rem;align-items:end">
+<div>
+<label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">Deal name</label>
+<input type="text" id="deal-name" placeholder="e.g. Foodliner" />
+</div>
+<div>
+<label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">Product</label>
+<select id="deal-product">
+<option value="Synergize">Synergize</option>
+<option value="Synergize with IDP">Synergize with IDP</option>
+<option value="IDP Only">IDP Only</option>
+<option value="Broker WF AI - TL">Broker WF AI - TL</option>
+<option value="Broker WF AI - LTL">Broker WF AI - LTL</option>
+<option value="Carrier WF AI">Carrier WF AI</option>
+<option value="Mobile Only">Mobile Only</option>
+<option value="Geotab Only">Geotab Only</option>
+<option value="Mobile + Geotab">Mobile + Geotab</option>
+</select>
+</div>
+<div>
+<label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">MRR $</label>
+<input type="number" id="deal-mrr" placeholder="0" min="0" step="100" />
+</div>
+<div>
+<label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">Close month</label>
+<select id="deal-month">
+<option value="">— select —</option>
+<option value="April">April</option>
+<option value="May">May</option>
+<option value="June">June</option>
+</select>
+</div>
+<div>
+<label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">Notes</label>
+<input type="text" id="deal-notes" placeholder="e.g. waiting on IT sign-off" />
+</div>
+<div style="padding-top:22px">
+<button class="add-btn" id="add-deal-btn" onclick="addDeal()">+ Add</button>
+</div>
+</div>
+<div id="deal-list-wrap" style="display:none;margin-bottom:1rem;overflow-x:auto">
+<table class="deal-table" style="min-width:550px">
+<thead><tr>
+<th>Deal</th><th>Product</th><th>MRR</th><th>ARR</th><th>Close month</th><th>Notes</th><th></th>
+</tr></thead>
+<tbody id="deal-tbody"></tbody>
+</table>
+</div>
+<div class="section-label" style="margin-top:0.25rem">pipeline coverage vs Q2 target ($11,191)</div>
+<div class="cov-cards">
+<div class="cov-card" id="cov-best-card">
+<div class="cov-label">Best case — 100% close rate</div>
+<div class="cov-val" id="cov-best-val" style="color:var(--muted)">$0</div>
+<div class="cov-sub" id="cov-best-sub" style="color:var(--muted)">0x coverage</div>
+<div class="cov-bar-track"><div class="cov-bar-fill" id="cov-best-bar" style="width:0%;background:var(--muted)"></div></div>
+</div>
+<div class="cov-card" id="cov-likely-card">
+<div class="cov-label">Likely — 70% close rate</div>
+<div class="cov-val" id="cov-likely-val" style="color:var(--muted)">$0</div>
+<div class="cov-sub" id="cov-likely-sub" style="color:var(--muted)">0x coverage</div>
+<div class="cov-bar-track"><div class="cov-bar-fill" id="cov-likely-bar" style="width:0%;background:var(--muted)"></div></div>
+</div>
+<div class="cov-card" id="cov-cons-card">
+<div class="cov-label">Worst case — 50% close rate</div>
+<div class="cov-val" id="cov-cons-val" style="color:var(--muted)">$0</div>
+<div class="cov-sub" id="cov-cons-sub" style="color:var(--muted)">0x coverage</div>
+<div class="cov-bar-track"><div class="cov-bar-fill" id="cov-cons-bar" style="width:0%;background:var(--muted)"></div></div>
+</div>
+</div>
+<div class="sentinel" id="sentinel" style="background:var(--surface2)">
+<div class="sentinel-text" id="sentinel-text" style="color:var(--muted)">Add deals above to see pipeline health.</div>
+<span class="badge badge-muted" id="sentinel-badge">—</span>
+</div>
+</div>
+<!-- 5. Q1 LOCKED ────────────────────────────────────── -->
+<div class="section-label">Q1 — locked</div>
+<div class="grid4">
+<div class="card done">
+<div class="card-label">Closed MRR</div>
+<div class="card-val" id="q1-mrr-disp">—</div>
+<div class="card-sub" id="q1-arr-disp">—</div>
+</div>
+<div class="card done">
+<div class="card-label">Attainment</div>
+<div class="card-val" id="q1-att">—</div>
+<div class="card-sub"><span class="badge" id="q1-badge">—</span></div>
+</div>
+<div class="card done">
+<div class="card-label">Commission earned</div>
+<div class="card-val" id="q1-comm">—</div>
+<div class="card-sub">ARR × 9%</div>
+</div>
+<div class="card done">
+<div class="card-label">Q1 bonus</div>
+<div class="card-val">$3,000</div>
+<div class="card-sub"><span class="badge badge-green">locked</span></div>
+</div>
+</div>
+<!-- 6. Q3 & Q4 ───────────────────────────────────────── -->
+<div class="section-label">Q3 &amp; Q4 — tracking</div>
+<div class="grid4">
+<div class="card">
+<div class="card-label">Q3 closed (MRR)</div>
+<div class="card-val" id="q3-mrr-disp">$0</div>
+<div class="card-sub" id="q3-sub">—</div>
+</div>
+<div class="card">
+<div class="card-label">Q3 target</div>
+<div class="card-val">$14,391</div>
+<div class="card-sub"><span class="badge badge-muted" id="q3-badge">upcoming</span></div>
+</div>
+<div class="card">
+<div class="card-label">Q4 closed (MRR)</div>
+<div class="card-val" id="q4-mrr-disp">$0</div>
+<div class="card-sub" id="q4-sub">—</div>
+</div>
+<div class="card">
+<div class="card-label">Q4 target</div>
+<div class="card-val">$15,423</div>
+<div class="card-sub"><span class="badge badge-muted" id="q4-badge">upcoming</span></div>
+</div>
+</div>
+<!-- 13% ACCELERATOR ───────────────────────────────── -->
+<div class="section-label">13% accelerator tracker</div>
+<div class="panel" style="margin-bottom:1.5rem">
+<div class="acc-grid">
+<div class="acc-item"><div class="al">Threshold (MRR)</div><div class="av">$37,282</div></div>
+<div class="acc-item"><div class="al">Closed to date</div><div class="av" style="color:var(--green)" id="acc-closed">$11,417</div></div>
+<div class="acc-item"><div class="al">Still needed</div><div class="av" style="color:var(--amber)" id="acc-need">$25,865</div></div>
+<div class="acc-item"><div class="al">Status</div><div id="acc-status"><span class="badge badge-amber">not yet</span></div></div>
+</div>
+<div class="progress-track" style="height:12px;border-radius:6px">
+<div class="progress-fill" id="acc-bar" style="background:var(--amber);height:12px;border-radius:6px;width:30.6%"></div>
+</div>
+<div style="font-size:0.7rem;color:var(--muted);margin-top:6px;font-weight:500" id="acc-label">30.6% toward 13% accelerator rate</div>
+</div>
+<!-- CLOSED MRR INPUTS ────────────────────────────── -->
+<div class="section-label">closed MRR by quarter</div>
+<div class="q-inputs" style="margin-bottom:0">
+<div class="q-input-item">
+<label>Q1 (Jan–Mar) — locked</label>
+<input type="number" id="q1-closed" value="11417" readonly style="opacity:0.55;cursor:not-allowed" />
+</div>
+<div class="q-input-item">
+<label>Q2 (Apr–Jun)</label>
+<input type="number" id="q2-closed" value="0" min="0" step="100" placeholder="0" />
+</div>
+<div class="q-input-item">
+<label>Q3 (Jul–Sep)</label>
+<input type="number" id="q3-closed" value="0" min="0" step="100" placeholder="0" />
+</div>
+<div class="q-input-item">
+<label>Q4 (Oct–Dec)</label>
+<input type="number" id="q4-closed" value="0" min="0" step="100" placeholder="0" />
+</div>
+</div>
+<!-- PROJECTED FULL YEAR EARNINGS ───────────────────── -->
+<div class="section-label" style="margin-top:1.5rem">projected full year earnings</div>
+<div class="panel" style="margin-bottom:0">
+<div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+<div style="background:var(--green-dim);border-radius:12px;padding:16px 24px;text-align:center;min-width:180px">
+<div style="font-size:0.65rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px">Projected variable comp</div>
+<div style="font-size:2rem;font-weight:800;font-family:var(--font-head);color:var(--green)" id="proj-pace">—</div>
+<div style="font-size:0.68rem;color:var(--muted);margin-top:4px" id="proj-attainment-pct">based on current pace</div>
+</div>
+<div style="flex:1;min-width:220px">
+<div style="font-size:0.72rem;color:var(--muted);line-height:1.8" id="proj-note">—</div>
+</div>
+</div>
+</div>
 </main>
-
 <footer>Sales Dashboard 2026 — Manny</footer>
-
 <script>
-// ── CONFIG (edit these numbers to update dashboard) ──────────────
+// ── CONFIG ───────────────────────────────────────────────────────
 const QUOTA = { annual: 49709, q1: 8704, q2: 11191, q3: 14391, q4: 15423 };
-const COMM  = { base: 0.09, accel: 0.13, thresh_pct: 0.75, club: 0.23 };
+const COMM = { base: 0.09, accel: 0.13, thresh_pct: 0.75, club: 0.23 };
 const BONUS = { quarterly: 3000, annual: 10000 };
-const PW    = 'ajax123';
+const PW = 'ajax123';
 // ────────────────────────────────────────────────────────────────
-
 let deals = [];
 let isUnlocked = false;
 const T75 = QUOTA.annual * COMM.thresh_pct;
@@ -433,7 +398,6 @@ const T75 = QUOTA.annual * COMM.thresh_pct;
 // ── HELPERS ──────────────────────────────────────────────────────
 function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
 function pct(a, b) { return b > 0 ? Math.round(a / b * 100) : 0; }
-
 function calcComm(mrr) {
   if (mrr <= 0) return 0;
   const arr = mrr * 12, t75a = T75 * 12, anna = QUOTA.annual * 12;
@@ -441,10 +405,9 @@ function calcComm(mrr) {
   if (mrr <= QUOTA.annual) return t75a * COMM.base + (arr - t75a) * COMM.accel;
   return t75a * COMM.base + (anna - t75a) * COMM.accel + (arr - anna) * COMM.club;
 }
-
 function attBadge(p) {
   if (p >= 100) return ['badge-green', p + '% — hit!'];
-  if (p >= 75)  return ['badge-amber', p + '% there'];
+  if (p >= 75) return ['badge-amber', p + '% there'];
   return ['badge-blue', p + '% there'];
 }
 
@@ -460,7 +423,6 @@ function tryUnlock() {
     setTimeout(() => { m.textContent = 'view only'; m.style.color = 'var(--muted)'; }, 2000);
   }
 }
-
 function setLock(locked) {
   const form = document.getElementById('deal-add-form');
   if (form) form.style.display = locked ? 'none' : 'grid';
@@ -479,7 +441,6 @@ function setLock(locked) {
   if (btn) { btn.disabled = locked; btn.style.opacity = locked ? '0.45' : '1'; }
   document.querySelectorAll('.del-btn').forEach(b => { b.disabled = locked; b.style.opacity = locked ? '0.3' : '1'; });
 }
-
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && document.activeElement === document.getElementById('pw-input')) tryUnlock();
 });
@@ -569,49 +530,78 @@ function update() {
     annBonusBadge.className = 'badge badge-amber'; annBonusBadge.textContent = fmt(annNeed) + ' MRR away';
   }
 
-  // Projected full year earnings — based on current attainment pace
-  const BASE = 135000;
-  const quartersData = [
-    { closed: q1c, quota: QUOTA.q1 },
-    { closed: q2c, quota: QUOTA.q2 },
-    { closed: q3c, quota: QUOTA.q3 },
-    { closed: q4c, quota: QUOTA.q4 }
+  // ── PROJECTED FULL YEAR EARNINGS — time-aware ────────────────
+  // Quarter definitions with calendar boundaries
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const quarters = [
+    { closed: q1c,  quota: QUOTA.q1, start: new Date('2026-01-01'), end: new Date('2026-03-31') },
+    { closed: q2c,  quota: QUOTA.q2, start: new Date('2026-04-01'), end: new Date('2026-06-30') },
+    { closed: q3c,  quota: QUOTA.q3, start: new Date('2026-07-01'), end: new Date('2026-09-30') },
+    { closed: q4c,  quota: QUOTA.q4, start: new Date('2026-10-01'), end: new Date('2026-12-31') },
   ];
-  // Calculate attainment % from quarters with actual data
-  const activeQs = quartersData.filter(q => q.closed > 0);
-  const attainmentPct = activeQs.length > 0
-    ? activeQs.reduce((s, q) => s + (q.closed / q.quota), 0) / activeQs.length
-    : (q1c / QUOTA.q1); // fallback to Q1 only
 
-  // Project remaining quarters using current attainment pace
-  const projMRRbyQ = quartersData.map(q => q.closed > 0 ? q.closed : q.quota * attainmentPct);
+  const projMRRbyQ = quarters.map(q => {
+    const qTotalDays = (q.end - q.start) / 86400000 + 1;
+    const isPast      = today > q.end;
+    const isActive    = today >= q.start && today <= q.end;
+    const daysElapsed = Math.max(1, (today - q.start) / 86400000);
+
+    if (isPast) {
+      // Quarter is fully done — use actual closed number
+      return q.closed;
+    }
+    if (isActive && q.closed > 0) {
+      // Mid-quarter with real data: extrapolate daily run rate to full quarter
+      return Math.round((q.closed / daysElapsed) * qTotalDays);
+    }
+    if (isActive && q.closed === 0) {
+      // Mid-quarter but nothing closed yet — use quota as placeholder
+      return q.quota;
+    }
+    // Future quarter — assume quota pace
+    return q.quota;
+  });
+
   const projTotalMRR = projMRRbyQ.reduce((s, v) => s + v, 0);
-
-  // Commission on projected total
   const projComm = Math.round(calcComm(projTotalMRR));
 
-  // Quarterly bonuses — only count if projected MRR >= that quarter's quota
+  // Bonuses: quarterly only if projected >= that quarter's quota
   let projBonuses = 0;
-  quartersData.forEach((q, i) => {
-    const projQ = projMRRbyQ[i];
-    if (projQ >= q.quota) projBonuses += BONUS.quarterly;
+  quarters.forEach((q, i) => {
+    if (projMRRbyQ[i] >= q.quota) projBonuses += BONUS.quarterly;
   });
-  // Annual bonus only if projected total >= annual quota
   if (projTotalMRR >= QUOTA.annual) projBonuses += BONUS.annual;
 
   const projTotal = projComm + projBonuses;
-  const attPctDisplay = Math.round(attainmentPct * 100);
+
+  // Build a human-readable label showing what we did for the active quarter
+  const activeIdx = quarters.findIndex(q => today >= q.start && today <= q.end);
+  let paceLabel = 'based on year-to-date pace';
+  if (activeIdx >= 0) {
+    const aq = quarters[activeIdx];
+    const daysElapsed = Math.max(1, (today - aq.start) / 86400000);
+    const qTotalDays  = (aq.end - aq.start) / 86400000 + 1;
+    const daysPct     = Math.round(daysElapsed / qTotalDays * 100);
+    const qNames      = ['Q1', 'Q2', 'Q3', 'Q4'];
+    if (aq.closed > 0) {
+      paceLabel = `${qNames[activeIdx]} is ${daysPct}% done · ${fmt(aq.closed)} closed → projecting ${fmt(projMRRbyQ[activeIdx])} full-quarter`;
+    } else {
+      paceLabel = `${qNames[activeIdx]} is ${daysPct}% done · no closes yet — using quota as estimate`;
+    }
+  }
 
   document.getElementById('proj-pace').textContent = fmt(projTotal);
-  document.getElementById('proj-attainment-pct').textContent =
-    'At ' + attPctDisplay + '% attainment pace · ' + activeQs.length + ' quarter' + (activeQs.length !== 1 ? 's' : '') + ' of data';
+  document.getElementById('proj-attainment-pct').textContent = paceLabel;
 
+  const annualPct = Math.round(projTotalMRR / QUOTA.annual * 100);
   const projLines = [
-    '📊 Attainment pace: ' + attPctDisplay + '% (avg across ' + activeQs.length + ' quarter' + (activeQs.length !== 1 ? 's' : '') + ' with data)',
-    '📦 Projected annual MRR: ' + fmt(projTotalMRR) + ' → ' + fmt(projTotalMRR * 12) + ' ARR',
+    '📦 Projected annual MRR: ' + fmt(projTotalMRR) + ' (' + annualPct + '% of annual quota)',
+    '📅 Q1 ' + fmt(projMRRbyQ[0]) + ' (actual) · Q2 ' + fmt(projMRRbyQ[1]) + ' (proj) · Q3 ' + fmt(projMRRbyQ[2]) + ' (proj) · Q4 ' + fmt(projMRRbyQ[3]) + ' (proj)',
     '💰 Projected commission: ' + fmt(projComm),
     '🎯 Projected bonuses: ' + fmt(projBonuses) + ' (' + (projTotalMRR >= QUOTA.annual ? '$10k annual ✓' : '$10k annual ✗') + ' + quarterly where quota hit)',
-    '✅ Total projected variable comp: ' + fmt(projTotal)
+    '✅ Total projected variable comp: ' + fmt(projTotal),
   ];
   document.getElementById('proj-note').innerHTML = projLines.join('<br>');
 
@@ -635,18 +625,10 @@ const PROD_COLORS = {
   'Carrier WF AI': '#0369a1', 'Mobile Only': '#d97706',
   'Geotab Only': '#16a34a', 'Mobile + Geotab': '#15803d'
 };
-
 function productBadge(p) {
   const c = PROD_COLORS[p] || '#4a4d55';
   return `<span style="display:inline-block;font-size:0.65rem;font-weight:600;padding:2px 8px;border-radius:20px;background:${c}15;color:${c};border:1px solid ${c}40">${p || '—'}</span>`;
 }
-
-function sentimentLabel(s) {
-  if (s === 'high') return '<span class="badge badge-green">High</span>';
-  if (s === 'med')  return '<span class="badge badge-amber">Med</span>';
-  return '<span class="badge badge-muted">Low</span>';
-}
-
 function addDeal() {
   if (!isUnlocked) return;
   const name = document.getElementById('deal-name').value.trim();
@@ -664,14 +646,12 @@ function addDeal() {
   renderDeals();
   updatePipeline();
 }
-
 function removeDeal(id) {
   deals = deals.filter(d => d.id !== id);
   saveDealsToSheets();
   renderDeals();
   updatePipeline();
 }
-
 function renderDeals() {
   const wrap = document.getElementById('deal-list-wrap');
   if (deals.length === 0) { wrap.style.display = 'none'; return; }
@@ -707,43 +687,38 @@ function renderDeals() {
     </tr>`).join('');
   if (!isUnlocked) setLock(true);
 }
-
 function updateNote(id, value) {
   const deal = deals.find(d => d.id === id);
   if (!deal) return;
   deal.notes = value;
   saveDealsToSheets();
 }
-
 function updateDealField(id, field, value) {
   const deal = deals.find(d => d.id === id);
   if (!deal) return;
   deal[field] = value;
   saveDealsToSheets();
 }
-
 function updatePipeline() {
   const q2c = parseFloat(document.getElementById('q2-closed').value) || 0;
   const target = QUOTA.q2;
-  const total  = deals.reduce((s,d) => s+d.mrr, 0);
-  const best   = total;                        // 100%
-  const likely = Math.round(total * 0.70);     // 70%
-  const cons   = Math.round(total * 0.50);     // 50%
+  const total = deals.reduce((s,d) => s+d.mrr, 0);
+  const best   = total;
+  const likely = Math.round(total * 0.70);
+  const cons   = Math.round(total * 0.50);
 
-  // Pipeline note above Q2 cards
   const noteEl = document.getElementById('pipeline-note');
   const noteText = document.getElementById('pipeline-note-text');
   if (deals.length > 0) {
     noteEl.style.display = 'block';
     const likelyRatio = target > 0 ? (likely / target).toFixed(1) : '—';
-    const bestRatio = target > 0 ? (best / target).toFixed(1) : '—';
     noteText.innerHTML = `<strong>Current Q2 pipeline: ${fmt(total)} MRR</strong> &nbsp;·&nbsp; Best case (100%): ${fmt(best)} &nbsp;·&nbsp; Likely (70%): ${fmt(likely)} — <strong>${likelyRatio}x coverage</strong> of $11,191 target`;
   } else {
     noteEl.style.display = 'none';
   }
 
   function setCov(prefix, val) {
-    const ratio = target > 0 ? val / target : 0;
+    const ratio  = target > 0 ? val / target : 0;
     const barPct = Math.min(100, val / Math.max(target * 2, 1) * 100);
     let col, bg;
     if (ratio >= 2)      { col = '#16a34a'; bg = 'rgba(22,163,74,0.07)'; }
@@ -758,11 +733,10 @@ function updatePipeline() {
     document.getElementById('cov-'+prefix+'-card').style.background = bg;
     document.getElementById('cov-'+prefix+'-card').style.borderColor = col + '55';
   }
-
   setCov('best', best); setCov('likely', likely); setCov('cons', cons);
 
   const needed = Math.max(0, QUOTA.q2 - q2c);
-  const s = document.getElementById('sentinel');
+  const s  = document.getElementById('sentinel');
   const st = document.getElementById('sentinel-text');
   const sb = document.getElementById('sentinel-badge');
   if (deals.length === 0) {
@@ -771,13 +745,13 @@ function updatePipeline() {
     sb.className = 'badge badge-muted'; sb.textContent = '—'; return;
   }
   const lr = target > 0 ? likely / target : 2;
-  const cr = target > 0 ? cons / target : 2;
+  const cr = target > 0 ? cons   / target : 2;
   let msg, cls, bg, bc;
-  if (needed === 0)      { msg='Q2 quota already closed — pipeline is pure upside.'; cls='badge badge-green'; bg='rgba(22,163,74,0.07)'; bc='rgba(22,163,74,0.3)'; sb.textContent='quota hit'; }
-  else if (lr >= 2)      { msg='Strong — even at a 70% close rate you cover 2x the Q2 target. You\'re in great shape.'; cls='badge badge-green'; bg='rgba(22,163,74,0.07)'; bc='rgba(22,163,74,0.3)'; sb.textContent='healthy'; }
-  else if (lr >= 1)      { msg='Manageable — a 70% close rate covers Q2. Keep the pipeline moving.'; cls='badge badge-amber'; bg='rgba(217,119,6,0.07)'; bc='rgba(217,119,6,0.3)'; sb.textContent='watch it'; }
-  else if (cr >= 1)      { msg='Risky — you need better than a 50% close rate to hit Q2. Push to add more pipeline.'; cls='badge badge-amber'; bg='rgba(217,119,6,0.07)'; bc='rgba(217,119,6,0.3)'; sb.textContent='risky'; }
-  else if (best >= needed){ msg='Danger — even closing 100% of pipeline doesn\'t cover Q2. Build more pipeline now.'; cls='badge badge-red'; bg='rgba(220,38,38,0.07)'; bc='rgba(220,38,38,0.3)'; sb.textContent='danger'; }
+  if (needed === 0)      { msg="Q2 quota already closed — pipeline is pure upside."; cls='badge badge-green'; bg='rgba(22,163,74,0.07)'; bc='rgba(22,163,74,0.3)'; sb.textContent='quota hit'; }
+  else if (lr >= 2)      { msg="Strong — even at a 70% close rate you cover 2x the Q2 target. You're in great shape."; cls='badge badge-green'; bg='rgba(22,163,74,0.07)'; bc='rgba(22,163,74,0.3)'; sb.textContent='healthy'; }
+  else if (lr >= 1)      { msg="Manageable — a 70% close rate covers Q2. Keep the pipeline moving."; cls='badge badge-amber'; bg='rgba(217,119,6,0.07)'; bc='rgba(217,119,6,0.3)'; sb.textContent='watch it'; }
+  else if (cr >= 1)      { msg="Risky — you need better than a 50% close rate to hit Q2. Push to add more pipeline."; cls='badge badge-amber'; bg='rgba(217,119,6,0.07)'; bc='rgba(217,119,6,0.3)'; sb.textContent='risky'; }
+  else if (best >= needed){ msg="Danger — even closing 100% of pipeline doesn't cover Q2. Build more pipeline now."; cls='badge badge-red'; bg='rgba(220,38,38,0.07)'; bc='rgba(220,38,38,0.3)'; sb.textContent='danger'; }
   else                   { msg='Critical — full pipeline doesn\'t cover Q2. You need '+fmt(target-best)+' more MRR.'; cls='badge badge-red'; bg='rgba(220,38,38,0.07)'; bc='rgba(220,38,38,0.3)'; sb.textContent='critical'; }
   s.style.background = bg; s.style.borderColor = bc;
   st.style.color = 'var(--text)'; st.textContent = msg;
@@ -786,14 +760,12 @@ function updatePipeline() {
 
 // ── GOOGLE SHEETS API ────────────────────────────────────────────
 const API = 'https://script.google.com/macros/s/AKfycbw-EAT7uNadVD1TPjaIPJVTAproAHOI3_mON78nGGMEuxUI6ScmLjPteSmRqKmZfGrH5w/exec';
-
 function showStatus(msg, col) {
   const el = document.getElementById('save-status');
   if (!el) return;
   el.textContent = msg; el.style.color = col || 'var(--muted)';
   if (msg) setTimeout(() => { el.textContent = ''; }, 3000);
 }
-
 async function loadFromSheets() {
   try {
     showStatus('Loading...', 'var(--muted)');
@@ -801,7 +773,7 @@ async function loadFromSheets() {
       fetch(API + '?action=getDeals'),
       fetch(API + '?action=getClosed')
     ]);
-    const dealsData = await dealsRes.json();
+    const dealsData  = await dealsRes.json();
     const closedData = await closedRes.json();
     if (dealsData.deals) deals = dealsData.deals;
     if (closedData.closed) {
@@ -816,7 +788,6 @@ async function loadFromSheets() {
   renderDeals();
   update();
 }
-
 async function saveDealsToSheets() {
   try {
     showStatus('Saving...', 'var(--amber)');
@@ -825,7 +796,6 @@ async function saveDealsToSheets() {
     showStatus('Saved ✓', 'var(--green)');
   } catch(e) { showStatus('Save failed', 'var(--red)'); }
 }
-
 async function saveClosedToSheets() {
   try {
     const closed = {
@@ -842,7 +812,6 @@ async function saveClosedToSheets() {
 setLock(true);
 calcBizDaysLeft();
 loadFromSheets();
-
 document.getElementById('q2-closed').addEventListener('input', () => { saveClosedToSheets(); update(); });
 document.getElementById('q3-closed').addEventListener('input', () => { saveClosedToSheets(); update(); });
 document.getElementById('q4-closed').addEventListener('input', () => { saveClosedToSheets(); update(); });
