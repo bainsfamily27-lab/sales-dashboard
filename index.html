@@ -146,6 +146,7 @@ header > div:last-child { flex-wrap: wrap; gap: 8px; }
 </div>
 <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
 <span id="save-status" style="font-size:0.72rem;color:var(--muted)"></span>
+<button id="save-btn" onclick="manualSaveAll()" style="display:none;font-family:var(--font-body);font-size:0.75rem;font-weight:600;background:var(--green);border:none;color:#fff;border-radius:7px;padding:7px 16px;cursor:pointer;white-space:nowrap">💾 Save</button>
 <div id="lock-bar" style="display:flex;align-items:center;gap:8px">
 <input type="password" id="pw-input" placeholder="Password to edit" style="width:160px" />
 <button onclick="tryUnlock()" style="font-family:var(--font-body);font-size:0.75rem;font-weight:600;background:var(--accent-dim2);border:1px solid rgba(37,99,235,0.3);color:var(--accent);border-radius:7px;padding:7px 14px;cursor:pointer;white-space:nowrap">Unlock</button>
@@ -412,10 +413,48 @@ function attBadge(p) {
 }
 
 // ── PASSWORD ─────────────────────────────────────────────────────
+async function manualSaveAll() {
+  const btn = document.getElementById('save-btn');
+  const status = document.getElementById('save-status');
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+  btn.style.background = 'var(--amber)';
+  try {
+    const closed = {
+      q2: parseFloat(document.getElementById('q2-closed').value) || 0,
+      q3: parseFloat(document.getElementById('q3-closed').value) || 0,
+      q4: parseFloat(document.getElementById('q4-closed').value) || 0
+    };
+    const closedUrl = API + '?action=saveClosed&data=' + encodeURIComponent(JSON.stringify(closed));
+    const dealsUrl  = API + '?action=saveDeals&data='  + encodeURIComponent(JSON.stringify(deals));
+    await Promise.all([
+      fetch(closedUrl, { method: 'GET', mode: 'no-cors' }),
+      fetch(dealsUrl,  { method: 'GET', mode: 'no-cors' })
+    ]);
+    btn.textContent = '✓ Saved';
+    btn.style.background = 'var(--green)';
+    status.textContent = 'All changes saved';
+    status.style.color = 'var(--green)';
+    setTimeout(() => {
+      btn.textContent = '💾 Save';
+      btn.disabled = false;
+      status.textContent = '';
+    }, 2500);
+  } catch(e) {
+    btn.textContent = '💾 Save';
+    btn.style.background = 'var(--green)';
+    btn.disabled = false;
+    status.textContent = 'Save failed';
+    status.style.color = 'var(--red)';
+    setTimeout(() => { status.textContent = ''; }, 3000);
+  }
+}
+
 function tryUnlock() {
   if (document.getElementById('pw-input').value === PW) {
     isUnlocked = true;
     document.getElementById('lock-bar').innerHTML = '<span style="font-size:0.75rem;font-weight:600;color:var(--green)">✓ Editing unlocked</span>';
+    document.getElementById('save-btn').style.display = 'inline-block';
     setLock(false);
   } else {
     const m = document.getElementById('lock-msg');
