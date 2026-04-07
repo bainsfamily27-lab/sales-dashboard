@@ -294,7 +294,7 @@ header > div:last-child { flex-wrap: wrap; gap: 8px; }
 <!-- CHASE DEALS ─────────────────────────────────────── -->
 <div class="section-label" style="color:#6d28d9">⚡ chase / pull-forward deals <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:0.68rem;color:var(--muted);margin-left:4px">— not counted in Q2 stats · backup bench only</span></div>
 <div style="background:var(--purple-dim);border:1px solid rgba(124,58,237,0.2);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:0.78rem;color:var(--text);line-height:1.6">
-  These deals are <strong>outside your committed Q2 forecast</strong>. They could pull forward into Q2 if timing shifts, or offset a slip from your committed pipeline. None of this touches your Q2 numbers above.
+  These deals are <strong>outside of Q2 forecast</strong>. They could pull forward into Q2 if timing shifts, or offset a slip from Q2 pipeline. None of this touches Q2 numbers above.
 </div>
 
 <!-- Chase summary cards -->
@@ -1036,15 +1036,15 @@ function updateChase() {
     cls = 'badge badge-purple'; bg = 'var(--purple-dim)'; bc = 'rgba(124,58,237,0.3)';
     sb.textContent = 'upside only';
   } else if (total >= q2Need) {
-    msg = `Safety net looks good — if even some of these chase deals pull forward, you can cover the remaining ${fmt(q2Need)} MRR gap.`;
+    msg = `Your chase pipeline (${fmt(total)} MRR) is bigger than the ${fmt(q2Need)} you still need to hit Q2 quota. If any of these chase deals pull into Q2, you're covered even if a Q2 deal slips.`;
     cls = 'badge badge-purple'; bg = 'var(--purple-dim)'; bc = 'rgba(124,58,237,0.3)';
     sb.textContent = 'covers gap';
   } else if (best1 >= q2Need) {
-    msg = `One strong chase deal could cover the ${fmt(q2Need)} gap. Keep pressure on your biggest opportunity.`;
+    msg = `Your biggest chase deal alone (${fmt(best1)} MRR) could cover the ${fmt(q2Need)} you still need. If it pulls into Q2, you hit quota even if something else slips.`;
     cls = 'badge badge-purple'; bg = 'var(--purple-dim)'; bc = 'rgba(124,58,237,0.3)';
     sb.textContent = 'one could do it';
   } else {
-    msg = `Chase pipeline (${fmt(total)}) doesn't fully cover the ${fmt(q2Need)} Q2 gap — useful buffer but keep building committed pipeline too.`;
+    msg = `Chase pipeline adds ${fmt(total)} MRR of buffer — useful if something slips, but not enough to fully cover the ${fmt(q2Need)} Q2 gap on its own. Keep building your Q2 pipeline.`;
     cls = 'badge badge-amber'; bg = 'rgba(217,119,6,0.07)'; bc = 'rgba(217,119,6,0.3)';
     sb.textContent = 'partial buffer';
   }
