@@ -25,6 +25,9 @@
 --red-dim: rgba(220,38,38,0.08);
 --green: #16a34a;
 --green-dim: rgba(22,163,74,0.08);
+--purple: #7c3aed;
+--purple-dim: rgba(124,58,237,0.08);
+--purple-dim2: rgba(124,58,237,0.14);
 --font-head: 'Plus Jakarta Sans', sans-serif;
 --font-body: 'Inter', sans-serif;
 }
@@ -61,6 +64,7 @@ display: flex; align-items: center; gap: 8px;
 .badge-amber { background: var(--amber-dim); color: #b45309; border: 1px solid rgba(217,119,6,0.25); }
 .badge-red { background: var(--red-dim); color: #b91c1c; border: 1px solid rgba(220,38,38,0.25); }
 .badge-muted { background: rgba(0,0,0,0.05); color: var(--muted); border: 1px solid var(--border); }
+.badge-purple { background: var(--purple-dim); color: #6d28d9; border: 1px solid rgba(124,58,237,0.25); }
 .progress-section { margin-bottom: 1.5rem; }
 .progress-row { display: flex; align-items: center; gap: 12px; margin-bottom: 9px; }
 .progress-label { font-size: 0.74rem; color: var(--muted); min-width: 90px; }
@@ -287,6 +291,80 @@ header > div:last-child { flex-wrap: wrap; gap: 8px; }
 <span class="badge badge-muted" id="sentinel-badge">—</span>
 </div>
 </div>
+<!-- CHASE DEALS ─────────────────────────────────────── -->
+<div class="section-label" style="color:#6d28d9">⚡ chase / pull-forward deals <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:0.68rem;color:var(--muted);margin-left:4px">— not counted in Q2 stats · backup bench only</span></div>
+<div style="background:var(--purple-dim);border:1px solid rgba(124,58,237,0.2);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:0.78rem;color:var(--text);line-height:1.6">
+  These deals are <strong>outside your committed Q2 forecast</strong>. They could pull forward into Q2 if timing shifts, or offset a slip from your committed pipeline. None of this touches your Q2 numbers above.
+</div>
+
+<!-- Chase summary cards -->
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:1rem" id="chase-summary-grid">
+  <div class="card" style="border-left:3px solid var(--purple);border-radius:0 10px 10px 0">
+    <div class="card-label">Chase pipeline (MRR)</div>
+    <div class="card-val" id="chase-total-disp" style="color:#6d28d9">$0</div>
+    <div class="card-sub" id="chase-arr-disp">$0 ARR</div>
+  </div>
+  <div class="card" style="border-left:3px solid var(--purple);border-radius:0 10px 10px 0">
+    <div class="card-label">If any 1 chase deal closes</div>
+    <div class="card-val" id="chase-best1-disp" style="color:#6d28d9">$0</div>
+    <div class="card-sub">best single deal MRR</div>
+  </div>
+  <div class="card" style="border-left:3px solid var(--purple);border-radius:0 10px 10px 0">
+    <div class="card-label">Likely upside (50% rate)</div>
+    <div class="card-val" id="chase-likely-disp" style="color:#6d28d9">$0</div>
+    <div class="card-sub">conservative view</div>
+  </div>
+</div>
+
+<!-- Chase add form -->
+<div id="chase-add-form" style="display:none;grid-template-columns:minmax(0,1.4fr) minmax(0,1.2fr) minmax(0,0.7fr) minmax(0,1.5fr) auto;gap:8px;margin-bottom:1rem;align-items:end">
+  <div>
+    <label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">Deal name</label>
+    <input type="text" id="chase-name" placeholder="e.g. Apex Freight" />
+  </div>
+  <div>
+    <label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">Product</label>
+    <select id="chase-product">
+      <option value="Synergize">Synergize</option>
+      <option value="Synergize with IDP">Synergize with IDP</option>
+      <option value="IDP Only">IDP Only</option>
+      <option value="Broker WF AI - TL">Broker WF AI - TL</option>
+      <option value="Broker WF AI - LTL">Broker WF AI - LTL</option>
+      <option value="Carrier WF AI">Carrier WF AI</option>
+      <option value="Mobile Only">Mobile Only</option>
+      <option value="Geotab Only">Geotab Only</option>
+      <option value="Mobile + Geotab">Mobile + Geotab</option>
+    </select>
+  </div>
+  <div>
+    <label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">MRR $</label>
+    <input type="number" id="chase-mrr" placeholder="0" min="0" step="100" />
+  </div>
+  <div>
+    <label style="display:block;font-size:0.7rem;color:var(--muted);font-weight:500;margin-bottom:5px">Notes / why it could pull forward</label>
+    <input type="text" id="chase-notes" placeholder="e.g. trial ending May, decision imminent" />
+  </div>
+  <div style="padding-top:22px">
+    <button class="add-btn" id="add-chase-btn" onclick="addChaseDeal()" style="background:#7c3aed">+ Add</button>
+  </div>
+</div>
+
+<!-- Chase deal table -->
+<div id="chase-list-wrap" style="display:none;margin-bottom:1rem;overflow-x:auto">
+  <table class="deal-table" style="min-width:500px">
+    <thead><tr>
+      <th>Deal</th><th>Product</th><th>MRR</th><th>ARR</th><th>Notes</th><th></th>
+    </tr></thead>
+    <tbody id="chase-tbody"></tbody>
+  </table>
+</div>
+
+<!-- Chase safety net callout -->
+<div class="sentinel" id="chase-sentinel" style="background:var(--surface2);margin-bottom:1.5rem">
+  <div class="sentinel-text" id="chase-sentinel-text" style="color:var(--muted)">Add chase deals above to see your safety net.</div>
+  <span class="badge badge-muted" id="chase-sentinel-badge">—</span>
+</div>
+
 <!-- 5. Q1 LOCKED ────────────────────────────────────── -->
 <div class="section-label">Q1 — locked</div>
 <div class="grid4">
@@ -456,30 +534,83 @@ function tryUnlock() {
     document.getElementById('lock-bar').innerHTML = '<span style="font-size:0.75rem;font-weight:600;color:var(--green)">✓ Editing unlocked</span>';
     document.getElementById('save-btn').style.display = 'inline-block';
     setLock(false);
+    // Re-render both tables so rows switch from disabled → interactive
+    renderDeals();
+    renderChaseDeals();
   } else {
     const m = document.getElementById('lock-msg');
     m.textContent = 'wrong password'; m.style.color = 'var(--red)';
     setTimeout(() => { m.textContent = 'view only'; m.style.color = 'var(--muted)'; }, 2000);
   }
 }
+
 function setLock(locked) {
+  // Show/hide the add-deal form
   const form = document.getElementById('deal-add-form');
   if (form) form.style.display = locked ? 'none' : 'grid';
+
+  // Show/hide the chase add form
+  const chaseForm = document.getElementById('chase-add-form');
+  if (chaseForm) chaseForm.style.display = locked ? 'none' : 'grid';
+
+  // Q2/Q3/Q4 closed MRR inputs
   ['q2-closed','q3-closed','q4-closed'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
-    if (locked) { el.setAttribute('readonly',''); el.style.opacity='0.55'; el.style.cursor='not-allowed'; }
-    else { el.removeAttribute('readonly'); el.style.opacity='1'; el.style.cursor='auto'; }
+    if (locked) {
+      el.setAttribute('readonly','');
+      el.style.opacity = '0.55';
+      el.style.cursor = 'not-allowed';
+    } else {
+      el.removeAttribute('readonly');
+      el.style.opacity = '1';
+      el.style.cursor = 'auto';
+    }
   });
-  ['deal-name','deal-mrr','deal-product','deal-month','deal-notes'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.disabled = locked; el.style.opacity = locked ? '0.5' : '1';
+
+  // Add-deal form inputs (only when locking — unlock is handled by renderDeals re-render)
+  if (locked) {
+    ['deal-name','deal-mrr','deal-product','deal-month','deal-notes'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.disabled = true;
+      el.style.opacity = '0.5';
+    });
+    const btn = document.getElementById('add-deal-btn');
+    if (btn) { btn.disabled = true; btn.style.opacity = '0.45'; }
+    ['chase-name','chase-mrr','chase-product','chase-notes'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.disabled = true; el.style.opacity = '0.5';
+    });
+    const cbtn = document.getElementById('add-chase-btn');
+    if (cbtn) { cbtn.disabled = true; cbtn.style.opacity = '0.45'; }
+  } else {
+    // Unlock the new-deal form inputs explicitly
+    ['deal-name','deal-mrr','deal-product','deal-month','deal-notes'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.disabled = false;
+      el.style.opacity = '1';
+    });
+    const btn = document.getElementById('add-deal-btn');
+    if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+    ['chase-name','chase-mrr','chase-product','chase-notes'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.disabled = false; el.style.opacity = '1';
+    });
+    const cbtn = document.getElementById('add-chase-btn');
+    if (cbtn) { cbtn.disabled = false; cbtn.style.opacity = '1'; }
+  }
+
+  // Update delete buttons in the existing rendered tables
+  document.querySelectorAll('.del-btn').forEach(b => {
+    b.disabled = locked;
+    b.style.opacity = locked ? '0.3' : '1';
   });
-  const btn = document.getElementById('add-deal-btn');
-  if (btn) { btn.disabled = locked; btn.style.opacity = locked ? '0.45' : '1'; }
-  document.querySelectorAll('.del-btn').forEach(b => { b.disabled = locked; b.style.opacity = locked ? '0.3' : '1'; });
 }
+
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && document.activeElement === document.getElementById('pw-input')) tryUnlock();
 });
@@ -570,7 +701,6 @@ function update() {
   }
 
   // ── PROJECTED FULL YEAR EARNINGS — time-aware ────────────────
-  // Quarter definitions with calendar boundaries
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -587,26 +717,15 @@ function update() {
     const isActive    = today >= q.start && today <= q.end;
     const daysElapsed = Math.max(1, (today - q.start) / 86400000);
 
-    if (isPast) {
-      // Quarter is fully done — use actual closed number
-      return q.closed;
-    }
-    if (isActive && q.closed > 0) {
-      // Mid-quarter with real data: extrapolate daily run rate to full quarter
-      return Math.round((q.closed / daysElapsed) * qTotalDays);
-    }
-    if (isActive && q.closed === 0) {
-      // Mid-quarter but nothing closed yet — use quota as placeholder
-      return q.quota;
-    }
-    // Future quarter — assume quota pace
+    if (isPast) return q.closed;
+    if (isActive && q.closed > 0) return Math.round((q.closed / daysElapsed) * qTotalDays);
+    if (isActive && q.closed === 0) return q.quota;
     return q.quota;
   });
 
   const projTotalMRR = projMRRbyQ.reduce((s, v) => s + v, 0);
   const projComm = Math.round(calcComm(projTotalMRR));
 
-  // Bonuses: quarterly only if projected >= that quarter's quota
   let projBonuses = 0;
   quarters.forEach((q, i) => {
     if (projMRRbyQ[i] >= q.quota) projBonuses += BONUS.quarterly;
@@ -615,7 +734,6 @@ function update() {
 
   const projTotal = projComm + projBonuses;
 
-  // Build a human-readable label showing what we did for the active quarter
   const activeIdx = quarters.findIndex(q => today >= q.start && today <= q.end);
   let paceLabel = 'based on year-to-date pace';
   if (activeIdx >= 0) {
@@ -664,10 +782,7 @@ const PROD_COLORS = {
   'Carrier WF AI': '#0369a1', 'Mobile Only': '#d97706',
   'Geotab Only': '#16a34a', 'Mobile + Geotab': '#15803d'
 };
-function productBadge(p) {
-  const c = PROD_COLORS[p] || '#4a4d55';
-  return `<span style="display:inline-block;font-size:0.65rem;font-weight:600;padding:2px 8px;border-radius:20px;background:${c}15;color:${c};border:1px solid ${c}40">${p || '—'}</span>`;
-}
+
 function addDeal() {
   if (!isUnlocked) return;
   const name = document.getElementById('deal-name').value.trim();
@@ -685,12 +800,14 @@ function addDeal() {
   renderDeals();
   updatePipeline();
 }
+
 function removeDeal(id) {
   deals = deals.filter(d => d.id !== id);
   saveDealsToSheets();
   renderDeals();
   updatePipeline();
 }
+
 function renderDeals() {
   const wrap = document.getElementById('deal-list-wrap');
   if (deals.length === 0) { wrap.style.display = 'none'; return; }
@@ -701,6 +818,7 @@ function renderDeals() {
     const bm = monthOrder[b.close_month] || 99;
     return am - bm;
   });
+  // FIX: Use the live isUnlocked flag, not a captured closure variable
   const locked = !isUnlocked;
   document.getElementById('deal-tbody').innerHTML = sorted.map(d => `
     <tr>
@@ -742,18 +860,21 @@ function renderDeals() {
       <td><button class="del-btn" onclick="removeDeal(${d.id})" ${locked?'disabled':''}>✕</button></td>
     </tr>`).join('');
 }
+
 function updateNote(id, value) {
   const deal = deals.find(d => d.id === id);
   if (!deal) return;
   deal.notes = value;
   saveDealsToSheets();
 }
+
 function updateDealField(id, field, value) {
   const deal = deals.find(d => d.id === id);
   if (!deal) return;
   deal[field] = value;
   saveDealsToSheets();
 }
+
 function updatePipeline() {
   const q2c = parseFloat(document.getElementById('q2-closed').value) || 0;
   const target = QUOTA.q2;
@@ -813,8 +934,127 @@ function updatePipeline() {
   sb.className = cls;
 }
 
+// ── CHASE DEALS ──────────────────────────────────────────────────
+let chaseDeals = [];
+
+function addChaseDeal() {
+  if (!isUnlocked) return;
+  const name  = document.getElementById('chase-name').value.trim();
+  const product = document.getElementById('chase-product').value;
+  const mrr   = parseFloat(document.getElementById('chase-mrr').value) || 0;
+  const notes = document.getElementById('chase-notes').value.trim();
+  if (!name || mrr <= 0) return;
+  chaseDeals.push({ id: Date.now(), name, product, mrr, notes });
+  saveChaseToSheets();
+  document.getElementById('chase-name').value = '';
+  document.getElementById('chase-mrr').value = '';
+  document.getElementById('chase-notes').value = '';
+  renderChaseDeals();
+  updateChase();
+}
+
+function removeChaseDeal(id) {
+  chaseDeals = chaseDeals.filter(d => d.id !== id);
+  saveChaseToSheets();
+  renderChaseDeals();
+  updateChase();
+}
+
+function renderChaseDeals() {
+  const wrap = document.getElementById('chase-list-wrap');
+  if (chaseDeals.length === 0) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+  const locked = !isUnlocked;
+  const sorted = [...chaseDeals].sort((a, b) => b.mrr - a.mrr);
+  document.getElementById('chase-tbody').innerHTML = sorted.map(d => `
+    <tr>
+      <td style="font-weight:600">${d.name}</td>
+      <td>
+        <select onchange="updateChaseField(${d.id},'product',this.value)"
+          style="font-size:0.72rem;padding:3px 6px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:${locked?'not-allowed':'pointer'};opacity:${locked?'0.6':'1'}"
+          ${locked ? 'disabled' : ''}>
+          ${['Synergize','Synergize with IDP','IDP Only','Broker WF AI - TL','Broker WF AI - LTL','Carrier WF AI','Mobile Only','Geotab Only','Mobile + Geotab']
+            .map(p => `<option value="${p}" ${d.product===p?'selected':''}>${p}</option>`).join('')}
+        </select>
+      </td>
+      <td>
+        <input type="number" value="${d.mrr}" min="0" step="100"
+          onchange="updateChaseField(${d.id},'mrr',parseFloat(this.value)||0);renderChaseDeals();updateChase();"
+          style="width:90px;font-size:0.75rem;padding:3px 6px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text);opacity:${locked?'0.6':'1'}"
+          ${locked ? 'readonly' : ''}
+        />
+      </td>
+      <td style="color:var(--muted);font-size:0.75rem">${fmt(d.mrr * 12)}</td>
+      <td style="max-width:260px;padding:4px 8px">
+        <input type="text" value="${(d.notes || '').replace(/"/g,'&quot;')}"
+          placeholder="add note..."
+          oninput="updateChaseNote(${d.id}, this.value)"
+          style="width:100%;font-size:0.72rem;background:transparent;border:none;border-bottom:1px dashed var(--border2);padding:2px 0;color:var(--muted);outline:none;font-family:var(--font-body);opacity:${locked?'0.5':'1'}"
+          ${locked ? 'readonly' : ''}
+        />
+      </td>
+      <td><button class="del-btn" onclick="removeChaseDeal(${d.id})" ${locked?'disabled':''}>✕</button></td>
+    </tr>`).join('');
+}
+
+function updateChaseNote(id, value) {
+  const d = chaseDeals.find(d => d.id === id);
+  if (d) { d.notes = value; saveChaseToSheets(); }
+}
+
+function updateChaseField(id, field, value) {
+  const d = chaseDeals.find(d => d.id === id);
+  if (d) { d[field] = value; saveChaseToSheets(); }
+}
+
+function updateChase() {
+  const total  = chaseDeals.reduce((s,d) => s+d.mrr, 0);
+  const likely = Math.round(total * 0.50);
+  const best1  = chaseDeals.length > 0 ? Math.max(...chaseDeals.map(d => d.mrr)) : 0;
+
+  document.getElementById('chase-total-disp').textContent  = fmt(total);
+  document.getElementById('chase-arr-disp').textContent    = fmt(total * 12) + ' ARR';
+  document.getElementById('chase-best1-disp').textContent  = fmt(best1);
+  document.getElementById('chase-likely-disp').textContent = fmt(likely);
+
+  // Safety net callout
+  const q2c    = parseFloat(document.getElementById('q2-closed').value) || 0;
+  const q2Need = Math.max(0, QUOTA.q2 - q2c);
+  const s  = document.getElementById('chase-sentinel');
+  const st = document.getElementById('chase-sentinel-text');
+  const sb = document.getElementById('chase-sentinel-badge');
+
+  if (chaseDeals.length === 0) {
+    s.style.cssText = 'background:var(--surface2);border-color:var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:1.5rem;border:1px solid var(--border);transition:all 0.3s';
+    st.style.color = 'var(--muted)'; st.textContent = 'Add chase deals above to see your safety net.';
+    sb.className = 'badge badge-muted'; sb.textContent = '—'; return;
+  }
+
+  let msg, cls, bg, bc;
+  if (q2Need === 0) {
+    msg = `Q2 is already covered — your ${chaseDeals.length} chase deal${chaseDeals.length>1?'s':''} (${fmt(total)} MRR) are pure upside for the quarter.`;
+    cls = 'badge badge-purple'; bg = 'var(--purple-dim)'; bc = 'rgba(124,58,237,0.3)';
+    sb.textContent = 'upside only';
+  } else if (total >= q2Need) {
+    msg = `Safety net looks good — if even some of these chase deals pull forward, you can cover the remaining ${fmt(q2Need)} MRR gap.`;
+    cls = 'badge badge-purple'; bg = 'var(--purple-dim)'; bc = 'rgba(124,58,237,0.3)';
+    sb.textContent = 'covers gap';
+  } else if (best1 >= q2Need) {
+    msg = `One strong chase deal could cover the ${fmt(q2Need)} gap. Keep pressure on your biggest opportunity.`;
+    cls = 'badge badge-purple'; bg = 'var(--purple-dim)'; bc = 'rgba(124,58,237,0.3)';
+    sb.textContent = 'one could do it';
+  } else {
+    msg = `Chase pipeline (${fmt(total)}) doesn't fully cover the ${fmt(q2Need)} Q2 gap — useful buffer but keep building committed pipeline too.`;
+    cls = 'badge badge-amber'; bg = 'rgba(217,119,6,0.07)'; bc = 'rgba(217,119,6,0.3)';
+    sb.textContent = 'partial buffer';
+  }
+  s.style.background = bg; s.style.borderColor = bc;
+  st.style.color = 'var(--text)'; st.textContent = msg;
+  sb.className = cls;
+}
+
 // ── GOOGLE SHEETS API ────────────────────────────────────────────
-const API = 'https://script.google.com/macros/s/AKfycbw-EAT7uNadVD1TPjaIPJVTAproAHOI3_mON78nGGMEuxUI6ScmLjPteSmRqKmZfGrH5w/exec';
+const API = 'https://script.google.com/macros/s/AKfycbz0ZyKOxviqayRi-rL25d0e2RNgWA6ruTIBJd0gjV4t6LWghO7kKp1_Khm3JSbB_CFN/exec';
 function showStatus(msg, col) {
   const el = document.getElementById('save-status');
   if (!el) return;
@@ -824,24 +1064,29 @@ function showStatus(msg, col) {
 async function loadFromSheets() {
   try {
     showStatus('Loading...', 'var(--muted)');
-    const [dealsRes, closedRes] = await Promise.all([
+    const [dealsRes, closedRes, chaseRes] = await Promise.all([
       fetch(API + '?action=getDeals'),
-      fetch(API + '?action=getClosed')
+      fetch(API + '?action=getClosed'),
+      fetch(API + '?action=getChase')
     ]);
     const dealsData  = await dealsRes.json();
     const closedData = await closedRes.json();
+    const chaseData  = await chaseRes.json().catch(() => ({}));
     if (dealsData.deals) deals = dealsData.deals;
     if (closedData.closed) {
       if (closedData.closed.q2 !== undefined) document.getElementById('q2-closed').value = closedData.closed.q2;
       if (closedData.closed.q3 !== undefined) document.getElementById('q3-closed').value = closedData.closed.q3;
       if (closedData.closed.q4 !== undefined) document.getElementById('q4-closed').value = closedData.closed.q4;
     }
+    if (chaseData.chase) chaseDeals = chaseData.chase;
     showStatus('', '');
   } catch(e) {
     showStatus('Could not load — check connection', 'var(--red)');
   }
   renderDeals();
+  renderChaseDeals();
   update();
+  updateChase();
 }
 async function saveDealsToSheets() {
   try {
@@ -862,12 +1107,18 @@ async function saveClosedToSheets() {
     await fetch(url, { method: 'GET', mode: 'no-cors' });
   } catch(e) { showStatus('Save failed', 'var(--red)'); }
 }
+async function saveChaseToSheets() {
+  try {
+    const url = API + '?action=saveChase&data=' + encodeURIComponent(JSON.stringify(chaseDeals));
+    await fetch(url, { method: 'GET', mode: 'no-cors' });
+  } catch(e) { /* silent */ }
+}
 
 // ── INIT ─────────────────────────────────────────────────────────
 setLock(true);
 calcBizDaysLeft();
 loadFromSheets();
-document.getElementById('q2-closed').addEventListener('input', () => { saveClosedToSheets(); update(); });
+document.getElementById('q2-closed').addEventListener('input', () => { saveClosedToSheets(); update(); updateChase(); });
 document.getElementById('q3-closed').addEventListener('input', () => { saveClosedToSheets(); update(); });
 document.getElementById('q4-closed').addEventListener('input', () => { saveClosedToSheets(); update(); });
 </script>
