@@ -693,6 +693,30 @@ const PRODUCT_GENRE = {
 // After that, Q1 flows through the product table like every other quarter.
 const Q1_LEGACY_SEED = 11417;
 
+// HISTORICAL TRUTH — hardcoded final closed-MRR values for locked quarters.
+// Whatever the Sheet says for these, the dashboard will overwrite with these values
+// (applied in applyHistoricalTruth(), called after load). Only locked quarters are overridden.
+// Update this constant whenever a quarter closes with its final reconciled numbers.
+const HISTORICAL_TRUTH = {
+  Synergize: { q1: 9701,    q2: 7900, q3: 17480.05, q4: null },
+  AI:        { q1: 1700,    q2: 4500, q3: 4126.76,  q4: null },
+  ELD:       { q1: 0,       q2: 0,    q3: 0,        q4: null },
+  Mobile:    { q1: 0,       q2: 0,    q3: 0,        q4: null }
+};
+function applyHistoricalTruth() {
+  if (!productMRR) return;
+  GENRES.forEach(g => {
+    if (!productMRR[g]) productMRR[g] = { q1:0, q2:0, q3:0, q4:0 };
+    const truth = HISTORICAL_TRUTH[g];
+    if (!truth) return;
+    ['q1','q2','q3','q4'].forEach(qk => {
+      if (truth[qk] == null) return;             // null → leave Sheet value alone
+      if (!isQuarterLocked(qk)) return;          // only overwrite locked (past) quarters
+      productMRR[g][qk] = truth[qk];
+    });
+  });
+}
+
 // Quarter definitions — single source of truth for section labels, close months, etc.
 const QUARTERS = [
   { id: 'q1', label: 'Q1', months: ['January','February','March'], monthsShort: 'Jan–Mar', start: '2026-01-01', end: '2026-03-31', quotaKey: 'q1' },
@@ -1723,6 +1747,15 @@ async function loadFromSheets() {
       }
     } else {
       console.warn('productMRR fetch failed — using cached/empty data, NOT saving to Sheet to avoid overwriting.');
+    }
+
+    // Overwrite locked-quarter values with the hardcoded historical truth,
+    // then persist back to the Sheet so downstream sessions also see the right numbers.
+    const _preTruth = JSON.stringify(productMRR);
+    applyHistoricalTruth();
+    if (productMRRLoadedFromSheet && JSON.stringify(productMRR) !== _preTruth) {
+      saveProductMRRToSheets();
+      console.log('Applied HISTORICAL_TRUTH overrides for locked quarters.');
     }
 
     // ── BROKERS — same safe pattern ─────────────────────────
