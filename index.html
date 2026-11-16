@@ -701,6 +701,15 @@ const QUARTERS = [
   { id: 'q4', label: 'Q4', months: ['October','November','December'], monthsShort: 'Oct–Dec', start: '2026-10-01', end: '2026-12-31', quotaKey: 'q4' },
 ];
 
+// Past quarters are LOCKED — their closed-MRR values are final history and can't be edited
+// (not from the product grid, not auto-synced from deals toggles). Only the current/future quarter is editable.
+function isQuarterLocked(qk) {
+  const q = QUARTERS.find(x => x.id === qk);
+  if (!q) return false;
+  const today = new Date(); today.setHours(0,0,0,0);
+  return today > new Date(q.end);
+}
+
 // ── STATE ─────────────────────────────────────────
 let deals = [];
 let chaseDeals = [];
@@ -1249,6 +1258,7 @@ function syncClosedDealsToProductMRR() {
   });
   let changed = false;
   ['q1','q2','q3','q4'].forEach(qk => {
+    if (isQuarterLocked(qk)) return;        // past quarters are frozen — never overwrite from deal toggles
     if (!quartersWithDeals[qk]) return;     // preserve manual values for quarters with no closed deals
     GENRES.forEach(g => {
       const newVal = Math.round(dealSums[g][qk] * 100) / 100;   // round to cents
@@ -1541,7 +1551,7 @@ function renderProductInputs() {
   const grid = document.getElementById('prod-input-grid');
   if (!grid) return;
   grid.innerHTML = `<div class="header first">Genre</div><div class="header">Q1</div><div class="header">Q2</div><div class="header">Q3</div><div class="header">Q4</div>`;
-  const locked = !isUnlocked;
+  const editLocked = !isUnlocked;
   let grandTotal = 0;
   GENRES.forEach(g => {
     const row = productMRR[g];
@@ -1550,15 +1560,21 @@ function renderProductInputs() {
     const sid = safeId(g);
     grid.innerHTML += `
       <div class="row-label">${escapeHtml(g)}</div>
-      ${['q1','q2','q3','q4'].map(qk => `
-        <input type="number" min="0" step="0.01" value="${row[qk] || 0}" id="prod-${sid}-${qk}" oninput="updateProductMRR('${escapeHtml(g)}','${qk}',parseFloat(this.value)||0)" ${locked ? 'readonly' : ''} style="opacity:${locked?'0.6':'1'};cursor:${locked?'not-allowed':'auto'}" />
-      `).join('')}`;
+      ${['q1','q2','q3','q4'].map(qk => {
+        // A past quarter is ALWAYS readonly — history is locked whether or not the user unlocks edit mode
+        const quarterLocked = isQuarterLocked(qk);
+        const ro = editLocked || quarterLocked;
+        const title = quarterLocked ? `${qk.toUpperCase()} is in the past — locked history` : '';
+        const bg = quarterLocked ? 'background:rgba(0,0,0,0.04);' : '';
+        return `<input type="number" min="0" step="0.01" value="${row[qk] || 0}" id="prod-${sid}-${qk}" oninput="updateProductMRR('${escapeHtml(g)}','${qk}',parseFloat(this.value)||0)" ${ro ? 'readonly' : ''} title="${title}" style="${bg}opacity:${ro?'0.6':'1'};cursor:${ro?'not-allowed':'auto'}" />`;
+      }).join('')}`;
   });
   document.getElementById('prod-grand-total').textContent = fmt(grandTotal);
 }
 let productSaveDebounce = null;
 function updateProductMRR(genre, qk, val) {
   if (!isUnlocked) return;
+  if (isQuarterLocked(qk)) return;    // past quarters are locked — ignore any edit attempt
   ensureProductMRR();
   if (!productMRR[genre]) productMRR[genre] = { q1:0, q2:0, q3:0, q4:0 };
   productMRR[genre][qk] = val;
