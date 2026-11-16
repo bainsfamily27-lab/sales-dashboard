@@ -84,6 +84,19 @@ button.add-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 .del-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.85rem; padding: 2px 8px; border-radius: 4px; transition: color 0.2s; }
 .del-btn:hover { color: var(--red); }
 .del-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+/* Move-between-sections buttons */
+.move-btn {
+  background: transparent; border: 1px solid transparent;
+  border-radius: 6px; padding: 3px 8px; margin-right: 4px;
+  font-family: var(--font-body); font-size: 0.7rem; font-weight: 600;
+  cursor: pointer; white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+.move-btn.to-discuss { color: #6d28d9; }
+.move-btn.to-discuss:hover { background: var(--purple-dim); border-color: rgba(124,58,237,0.25); }
+.move-btn.to-deal { color: var(--accent); }
+.move-btn.to-deal:hover { background: rgba(37,99,235,0.08); border-color: rgba(37,99,235,0.25); }
+.move-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 .acc-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin-bottom: 12px; }
 .acc-item .al { font-size: 0.68rem; color: var(--muted); margin-bottom: 3px; font-weight: 500; }
 .acc-item .av { font-size: 1rem; font-weight: 700; font-family: var(--font-head); }
@@ -1220,7 +1233,7 @@ function renderDeals() {
         <td style="max-width:200px;padding:4px 8px">
           <input type="text" value="${escapeHtml(d.notes || '')}" placeholder="add note..." oninput="updateNote(${d.id}, this.value)" style="width:100%;font-size:0.72rem;background:transparent;border:none;border-bottom:1px dashed var(--border2);padding:2px 0;color:var(--muted);outline:none;font-family:var(--font-body);opacity:${locked?'0.5':'1'}" ${locked ? 'readonly' : ''} />
         </td>
-        <td><button class="del-btn" onclick="removeDeal(${d.id})" ${locked?'disabled':''}>✕</button></td>
+        <td style="white-space:nowrap;text-align:right"><button class="move-btn to-discuss" onclick="moveDealToDiscussions(${d.id})" ${locked?'disabled':''} title="Move this deal to Ongoing Discussions">→ Discuss</button><button class="del-btn" onclick="removeDeal(${d.id})" ${locked?'disabled':''}>✕</button></td>
       </tr>`;
     }).join('');
   }
@@ -1339,6 +1352,52 @@ function removeChaseDeal(id) {
   saveChaseToSheets(); renderChaseDeals(); updateChase();
 }
 
+// ── MOVE DEAL BETWEEN SECTIONS ────────────────────────────────
+// Q4 deals ↔ ongoing discussions. New id is minted on move to keep both lists clean.
+function moveDealToDiscussions(id) {
+  if (!isUnlocked) return;
+  const d = deals.find(x => x.id === id);
+  if (!d) return;
+  const moved = {
+    id: makeUniqueId(),
+    name: d.name,
+    product: d.product,
+    mrr: Number(d.mrr) || 0,
+    notes: d.notes || ''
+  };
+  chaseDeals.push(moved);
+  chaseDeals = dedupeDeals(chaseDeals);
+  deals = deals.filter(x => x.id !== id);
+  // If the moved deal was closed, resync productMRR for Q4 (sync skips locked quarters)
+  const wasClosed = d.close_status === 'closed';
+  saveDealsToSheets(); saveChaseToSheets();
+  if (wasClosed) syncClosedDealsToProductMRR();
+  renderDeals(); renderChaseDeals(); updatePipeline(); updateChase();
+}
+
+function moveDiscussionToDeal(id) {
+  if (!isUnlocked) return;
+  const d = chaseDeals.find(x => x.id === id);
+  if (!d) return;
+  // Default to the active quarter's first month (e.g. October for Q4). User can change it after.
+  const qState = getQuarterState();
+  const defaultMonth = (qState && qState.active && qState.active.months && qState.active.months[0]) || '';
+  const moved = {
+    id: makeUniqueId(),
+    name: d.name,
+    product: d.product,
+    mrr: Number(d.mrr) || 0,
+    close_month: defaultMonth,
+    notes: d.notes || '',
+    close_status: 'pending'
+  };
+  deals.push(moved);
+  deals = dedupeDeals(deals);
+  chaseDeals = chaseDeals.filter(x => x.id !== id);
+  saveDealsToSheets(); saveChaseToSheets();
+  renderDeals(); renderChaseDeals(); updatePipeline(); updateChase();
+}
+
 function renderChaseDeals() {
   const wrap = document.getElementById('chase-list-wrap');
   if (chaseDeals.length === 0) { wrap.style.display = 'none'; return; }
@@ -1361,7 +1420,7 @@ function renderChaseDeals() {
       <td style="max-width:260px;padding:4px 8px">
         <input type="text" value="${escapeHtml(d.notes || '')}" placeholder="add note..." oninput="updateChaseNote(${d.id}, this.value)" style="width:100%;font-size:0.72rem;background:transparent;border:none;border-bottom:1px dashed var(--border2);padding:2px 0;color:var(--muted);outline:none;font-family:var(--font-body);opacity:${locked?'0.5':'1'}" ${locked ? 'readonly' : ''} />
       </td>
-      <td><button class="del-btn" onclick="removeChaseDeal(${d.id})" ${locked?'disabled':''}>✕</button></td>
+      <td style="white-space:nowrap;text-align:right"><button class="move-btn to-deal" onclick="moveDiscussionToDeal(${d.id})" ${locked?'disabled':''} title="Move this discussion back to Q4 Deals">→ Q4 Deal</button><button class="del-btn" onclick="removeChaseDeal(${d.id})" ${locked?'disabled':''}>✕</button></td>
     </tr>`).join('');
 }
 
